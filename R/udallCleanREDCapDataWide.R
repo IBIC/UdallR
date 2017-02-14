@@ -2,7 +2,8 @@
 #' @param dat Data frame that comes directly from redcap_read
 #' @return A cleaned data frame, with NA and empty columns removed, on or off prepended to the names, and all subject data on a single row (wide format)
 #' @export
-#' udallCleanREDCapDataWide <- function(dat) {
+#' 
+udallCleanREDCapDataWide <- function(dat) {
     # remove the leading "data" from the names
     names <- colnames(dat)
     newnames <- gsub("data.", "", names)
