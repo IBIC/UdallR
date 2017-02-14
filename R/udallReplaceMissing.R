@@ -1,6 +1,7 @@
 #' Replace missing data codes with NA for analysis
 #' @param dat Data frame with missing data codes
 #' @return dat Data frame with missing data codes assigned to NA
+#' @export
 udallReplaceMissing <- function(dat) {
     dat[dat == -900] <- NA
     dat[dat== -901] <- NA

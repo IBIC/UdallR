@@ -3,6 +3,7 @@
 #' are no obvious errors in the data. It will issue warnings, but currently
 #' will not stop if there is a problem.
 #' @param dat Data frame that has been processed and cleaned (missing codes replaced with NA
+#' @export
 udallCheckDataWide <- function(dat) {
     # make sure subjects have unique ids
     # would be useful to print out any duplicates if there is an issue
