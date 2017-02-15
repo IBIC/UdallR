@@ -35,8 +35,6 @@ udallCleanREDCapDataWide <- function(dat) {
     names(on)[names(on)=="on_idnum"] <- "idnum"
     names(off)[names(off)=="off_idnum"]  <- "idnum"    
 
-    # create a group variable
-
     # merge these data frames together from idnum
     merged <- merge(on, off, by="idnum")
 
@@ -57,7 +55,11 @@ udallCleanREDCapDataWide <- function(dat) {
     merged$group <- merged$on_health_demo_group
     merged$group[merged$group > 2] <- NA
     merged$group <- as.factor(merged$group)
-    levels(merged$group) <- c("control", "pd")    
+    # PD is 1, control is 2
+    levels(merged$group) <- c("pd", "control")    
+
+    #score various assessments
+    merged <- scoreFOG(merged)
 
     return(merged)
 }
