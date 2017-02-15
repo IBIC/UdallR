@@ -1,8 +1,3 @@
----
-output:
-  pdf_document: default
-  html_document: default
----
 # UdallR
 R functions to analyze data from the Udall Project 2 REDCap database. 
 
