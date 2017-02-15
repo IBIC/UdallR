@@ -12,7 +12,7 @@ After logging in to REDCap, select "MyProjects" > "UDALL_P2" and then "API" unde
 If the "API" option is missing from the "Applications" menu, then someone in the project must give you privileges to see this page. If you are able to access the "API" page, there will be an option to request a new Application Programming Interface (API) token from the REDCap administrator. When your token request has successfully processed, your token should be printed out in green text on this page. A new token can be regenerated at any point by selecting "Regenerate token".
 
 
-<img src="./images/api_demo_2.png" height="550px" width="650px" />
+<img src="./images/api_demo_2.png" height="650px" width="550px" />
 
 
 For more information, see REDCap's ducmentation of API tokens: https://redcap.iths.org/redcap_v7.1.2/API/help.php?content=default
