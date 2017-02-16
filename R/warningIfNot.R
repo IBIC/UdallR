@@ -5,3 +5,4 @@ warningIfNot<- function (condition, message)
     if(condition== FALSE) {
         warning(message)
     }
+
