@@ -36,7 +36,7 @@ udallCleanREDCapDataWide <- function(dat) {
     names(off)[names(off)=="off_idnum"]  <- "idnum"    
 
     # merge these data frames together from idnum
-    merged <- merge(on, off, by="idnum")
+    merged <- merge(on, off, by="idnum", all.x=TRUE, all.y=TRUE)
 
     # We will create a couple of useful variables here
     #create sex variable
