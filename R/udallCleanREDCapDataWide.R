@@ -60,6 +60,9 @@ udallCleanREDCapDataWide <- function(dat) {
 
     #score various assessments
     merged <- scoreFOG(merged)
+    
+    # score UPDRS total
+    merged <- scoreUPDRS(merged)
 
     return(merged)
 }
