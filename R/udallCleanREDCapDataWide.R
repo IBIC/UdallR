@@ -40,7 +40,7 @@ udallCleanREDCapDataWide <- function(dat) {
 
     # We will create a couple of useful variables here
     #create sex variable
-    merged$sex <-merged$on_health_demo_sex
+    merged$sex <- merged$on_health_demo_sex
     merged$sex[ merged$sex > 2] <- NA
     merged$sex <- as.factor(merged$sex)
     levels(merged$sex) <- c("male", "female")
@@ -56,9 +56,9 @@ udallCleanREDCapDataWide <- function(dat) {
     merged$group[merged$group > 2] <- NA
     merged$group <- as.factor(merged$group)
     # PD is 1, control is 2
-    levels(merged$group) <- c("pd", "control")    
+    levels(merged$group) <- c("pd", "control")
 
-    #score various assessments
+    # score various assessments
     merged <- scoreFOG(merged)
     
     # score UPDRS total
