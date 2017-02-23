@@ -29,6 +29,7 @@ eval_error <- function(df, chexp) {
     #   do not continue if no match with expected 
   }
 }
+
 #################################
 
 ##########################################
@@ -44,26 +45,44 @@ test <- data.frame("idnum" = 1:10, "sex" = factor(rep(c(1,2), 5))) # small test 
 ###########################################
 
 udallCheckDataWideTest <- function(df) {
+  orig <- df
+  #############################
+  ### Testing Duplicate IDs ###
+  # testing one duplicate 
+  df$idnum[3] <- 2
+  eval_error(df, "Duplicate IDs for  1 subjects: 2")
+  
+  # testing a few duplicates
+  df$idnum[5:10] <- rep(c(1,2), 3)
+  eval_error(df, "Duplicate IDs for  2 subjects: 1 2")
+  
+  # testing all duplicates 
+  df$idnum[1:10] <- rep(c(3,4,5,6,7), 2)
+  eval_error(df,"Duplicate IDs for  5 subjects: 3 4 5 6 7")
+  #############################
+  
   #############################
   ### Testing Sex Column ######
+  df <- orig
   eval_error(df, 1) # No missing data
   #   no error expected, length of error output list should be 1
   
-  df[5, "sex"] <- NA # One missing value
+  df$sex[5] <- NA # One missing value
   eval_error(df, "Missing sex for  1 subjects:  5")
   #   compare character format of expected error message with error from output list
   
-  df[1:7, "sex"] <- NA # Several (7) missing values
+  df$sex[1:7] <- NA # Several (7) missing values
   eval_error(df, "Missing sex for  7 subjects:  1 2 3 4 5 6 7")
   #   compare...expected...with error...
   
-  df[, "sex"] <- NA # All values missing
+  df$sex <- NA # All values missing
   eval_error(df, "Missing sex for  10 subjects:  1 2 3 4 5 6 7 8 9 10")
   #   compare...expected...with error...
-  
-  print("Missing sex value check working correctly.") # Print if test successful.
   #############################
+  
+  print("udcallCheckDataWide function is working correctly")
 }
 
 
 udallCheckDataWideTest(test) # call to function 
+
