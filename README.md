@@ -15,7 +15,7 @@ If the "API" option is missing from the "Applications" menu, then someone in the
 <img src="./images/api_demo_2.png" height="500px" width="700px" />
 
 
-For more information, see REDCap's ducmentation of API tokens: https://redcap.iths.org/redcap_v7.1.2/API/help.php?content=default
+For more information, see REDCap's documentation of API tokens: https://redcap.iths.org/redcap_v7.1.2/API/help.php?content=default
 
 
 ## Loading the library functions
