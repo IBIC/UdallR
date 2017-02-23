@@ -2,6 +2,9 @@
 ##### Test script for scoreUDPRSTest function 
 #### ~ compares computed total score on the UPDRS Part III with expcted when original values are replaed
 #### by missing values 
+#### Before running function, set working directory to UdallR's parent directory 
+# source private scoreUPDRS.R function
+source("UdallR/R/scoreUPDRS.R")
 
 # test data frame from data of original data frame 
 testdf <- data.frame(on_updrs_3a = c(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1), 
