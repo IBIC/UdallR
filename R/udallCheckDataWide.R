@@ -47,10 +47,10 @@ udallCheckDataWide <- function(dat) {
     off_updrs_3_pd <- data.frame(dat[dat$group == "pd", off_updrs_3_colnames])
     
     # check ranges between 0 and 4
-    checkRange(on_updrs_3_control, 0, 4)
-    checkRange(on_updrs_3_pd, 0, 4) 
-    checkRange(off_updrs_3_control, 0, 4)
-    checkRange(off_updrs_3_pd, 0, 4)
+    checkNumericRange(on_updrs_3_control, 0, 4)
+    checkNumericRange(on_updrs_3_pd, 0, 4) 
+    checkNumericRange(off_updrs_3_control, 0, 4)
+    checkNumericRange(off_updrs_3_pd, 0, 4)
     
     # extract column names of hoehn and yahr scoring items and idnumbers for both on and off conditions
     on_updrs_3_hoehn_yahr_column_names <- c("idnum", "on_updrs_3_hoehn_yahr")
@@ -63,10 +63,10 @@ udallCheckDataWide <- function(dat) {
     off_updrs_3_hoehn_yahr_pd <- data.frame(dat[dat$group == "pd", off_updrs_3_hoehn_yahr_column_names])
     
     # check ranges between 0 and 5
-    checkRange(on_updrs_3_hoehn_yahr_control, 0, 5)
-    checkRange(on_updrs_3_hoehn_yahr_pd, 0, 5) 
-    checkRange(off_updrs_3_hoehn_yahr_control, 0, 5)
-    checkRange(off_updrs_3_hoehn_yahr_pd, 0, 5)
+    checkNumericRange(on_updrs_3_hoehn_yahr_control, 0, 5)
+    checkNumericRange(on_updrs_3_hoehn_yahr_pd, 0, 5) 
+    checkNumericRange(off_updrs_3_hoehn_yahr_control, 0, 5)
+    checkNumericRange(off_updrs_3_hoehn_yahr_pd, 0, 5)
     
     # extract column names of both off and on updrs 4 scoring items 
     on_updrs_4_colnames <- c("on_updrs_4_1", "on_updrs_4_2", "on_updrs_4_3", "on_updrs_4_4", "on_updrs_4_5", 
@@ -82,9 +82,9 @@ udallCheckDataWide <- function(dat) {
     off_updrs_4_pd <- data.frame(dat[dat$group == "pd", off_updrs_4_colnames])
     
     # check ranges between 0 and 4
-    checkRange(on_updrs_4_control, 0, 4)
-    checkRange(on_updrs_4_pd, 0, 4) 
-    checkRange(off_updrs_4_control, 0, 4)
-    checkRange(off_updrs_4_pd, 0, 4)
+    checkNumericRange(on_updrs_4_control, 0, 4)
+    checkNumericRange(on_updrs_4_pd, 0, 4) 
+    checkNumericRange(off_updrs_4_control, 0, 4)
+    checkNumericRange(off_updrs_4_pd, 0, 4)
 }
 
