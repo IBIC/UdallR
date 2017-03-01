@@ -3,7 +3,7 @@
 #### ~ compares computed total score on the UPDRS Part III with expcted when original values are replaed
 #### by missing values 
 #### Before running function, set working directory to UdallR's parent directory 
-# source private scoreUPDRS.R function
+# source private scoreUPDRS.R functions
 source("UdallR/R/scoreUPDRS.R")
 
 # test data frame from data of original data frame 
@@ -80,7 +80,7 @@ scoreUPDRS3Test <- function(dat) {
   last_col = 37
   
   # no extra NA values
-  #stopifnot(identical(scoreUPDRS(dat)$on_updrs_3_total, c(22, 32, 14, 48, 44, 36, 40, 17, 28, 33, 20, 3, 15, 14, 0, 2, 14, 1, 0, 22)))
+  stopifnot(identical(scoreUPDRS(dat)$on_updrs_3_total, c(19, 30, 11, 45, 41, 33, 37, 14, 25, 30, 17, 3, 1, 0, 0, 2, 0, 1, 0, 19)))
   
   # 1st column, 1st row
   compare_total_with_NA(dat, 1, 1, c(19, 30, 11, 45, 41, 33, 37, 14, 25, 30, 17, 3, 1, 0, 0, 2, 0, 1, 0, 19), "on_updrs_3_total")

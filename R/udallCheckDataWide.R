@@ -2,20 +2,9 @@
 #' This function contains arbitrary sanity checks to make sure that there
 #' are no obvious errors in the data. It will issue warnings, but currently
 #' will not stop if there is a problem.
-#' @param dat Data frame that has been processed and cleaned (missing codes replaced with NA
+#' @param dat Data frame that has been processed and cleaned missing codes replaced with NA
 #' @export
-
-# passed a data.frame, min and max; will print out warning and id numbers that are not within the specified 
-# min and max
-check_range <- function(dat, min, max) {
-  idnum <- dat$idnum
-  dat$idnum <- NULL
-  outOfRange <- which(names(which(rowSums(dat < min | max < dat, na.rm = TRUE) != 0))
-                      == rownames(dat))
-  rowsNotInRange <- length(outOfRange)
-  warningIfNot(rowsNotInRange == 0, paste("Incorrect data range for following subjects:", 
-                                          paste(idnum[outOfRange], collapse = ", ")))
-}
+ 
 
 udallCheckDataWide <- function(dat) {
     # make sure subjects have unique ids
@@ -28,6 +17,7 @@ udallCheckDataWide <- function(dat) {
     warningIfNot(sum(is.na(dat$sex)) == 0, paste("Missing sex for ", length(miss_sex), 
                                                  "subjects: ", paste(miss_sex,collapse = " ")))
     
+    ##### Check UPDRS scoring items column range values 
     # column names of on_updrs_3 scoring items that are not hoens and yahr
     on_updrs_3_colnames <- c("idnum", "on_updrs_3_1", "on_updrs_3_2", 
                              "on_updrs_3_3_neck", "on_updrs_3_3_rue", "on_updrs_3_3_lue", "on_updrs_3_3_rle", 
@@ -51,16 +41,16 @@ udallCheckDataWide <- function(dat) {
                               "off_updrs_3_18")
     
     # create data frame for each both control and pd groups and for off/on conditions 
-    on_3_updrs_control <- data.frame(dat[dat$group == "control", on_updrs_3_colnames])
-    on_3_updrs_pd <- data.frame(dat[dat$group == "pd", on_updrs_3_colnames])
-    off_3_updrs_control <- data.frame(dat[dat$group == "control", off_updrs_3_colnames])
-    off_3_updrs_pd <- data.frame(dat[dat$group == "pd", off_updrs_3_colnames])
+    on_updrs_3_control <- data.frame(dat[dat$group == "control", on_updrs_3_colnames])
+    on_updrs_3_pd <- data.frame(dat[dat$group == "pd", on_updrs_3_colnames])
+    off_updrs_3_control <- data.frame(dat[dat$group == "control", off_updrs_3_colnames])
+    off_updrs_3_pd <- data.frame(dat[dat$group == "pd", off_updrs_3_colnames])
     
     # check ranges between 0 and 4
-    check_range(on_updrs_control, 0, 4)
-    check_range(on_updrs_pd, 0, 4) 
-    check_range(off_updrs_control, 0, 4)
-    check_range(off_updrs_pd, 0, 4)
+    checkRange(on_updrs_3_control, 0, 4)
+    checkRange(on_updrs_3_pd, 0, 4) 
+    checkRange(off_updrs_3_control, 0, 4)
+    checkRange(off_updrs_3_pd, 0, 4)
     
     # extract column names of hoehn and yahr scoring items and idnumbers for both on and off conditions
     on_updrs_3_hoehn_yahr_column_names <- c("idnum", "on_updrs_3_hoehn_yahr")
@@ -73,10 +63,10 @@ udallCheckDataWide <- function(dat) {
     off_updrs_3_hoehn_yahr_pd <- data.frame(dat[dat$group == "pd", off_updrs_3_hoehn_yahr_column_names])
     
     # check ranges between 0 and 5
-    check_range(on_updrs_3_hoehn_yahr_control, 0, 5)
-    check_range(on_updrs_3_hoehn_yahr_pd, 0, 5) 
-    check_range(off_updrs_3_hoehn_yahr_control, 0, 5)
-    check_range(off_updrs_3_hoehn_yahr_pd, 0, 5)
+    checkRange(on_updrs_3_hoehn_yahr_control, 0, 5)
+    checkRange(on_updrs_3_hoehn_yahr_pd, 0, 5) 
+    checkRange(off_updrs_3_hoehn_yahr_control, 0, 5)
+    checkRange(off_updrs_3_hoehn_yahr_pd, 0, 5)
     
     # extract column names of both off and on updrs 4 scoring items 
     on_updrs_4_colnames <- c("on_updrs_4_1", "on_updrs_4_2", "on_updrs_4_3", "on_updrs_4_4", "on_updrs_4_5", 
@@ -92,9 +82,9 @@ udallCheckDataWide <- function(dat) {
     off_updrs_4_pd <- data.frame(dat[dat$group == "pd", off_updrs_4_colnames])
     
     # check ranges between 0 and 4
-    check_range(on_updrs_4_control, 0, 4)
-    check_range(on_updrs_4_pd, 0, 4) 
-    check_range(off_updrs_4_control, 0, 4)
-    check_range(off_updrs_4_pd, 0, 4)
+    checkRange(on_updrs_4_control, 0, 4)
+    checkRange(on_updrs_4_pd, 0, 4) 
+    checkRange(off_updrs_4_control, 0, 4)
+    checkRange(off_updrs_4_pd, 0, 4)
 }
 
