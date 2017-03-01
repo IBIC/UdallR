@@ -2,7 +2,7 @@
 #' name of element that is not in specified range. 
 #' @param dat data.frame with columns of items to be checked for specified range
 #' @param min minimum value in range
-#' @param mzx maximum value in range
+#' @param max maximum value in range
 #' @export
 #' 
 
