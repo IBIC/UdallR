@@ -31,6 +31,10 @@ udallCleanREDCapDataWide <- function(dat) {
     colnames(on) <- gsub("on_on", "on", colnames(on))
     colnames(off) <- gsub("off_off", "off", colnames(off))    
 
+    # fix freesurfer names
+    on <- renameFreeSurfer(on)
+
+
     # rename subject id from each of these - I like it to be idnum
     names(on)[names(on)=="on_idnum"] <- "idnum"
     names(off)[names(off)=="off_idnum"]  <- "idnum"    
@@ -63,6 +67,14 @@ udallCleanREDCapDataWide <- function(dat) {
     
     # score UPDRS total
     merged <- scoreUPDRS(merged)
+
+    # education - right now coming from health/demo
+    merged$educ <- merged$on_health_demo_years_educ
+    
+    # compute scan age in years
+    merged$scage <- (as.Date(merged$on_mri_date) - as.Date(merged$on_mri_dob))/365
+    # score SAI
+    merged <-scoreSAI(merged)
 
     return(merged)
 }
