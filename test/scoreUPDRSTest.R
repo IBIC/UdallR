@@ -18,13 +18,14 @@ compare_total_with_NA <- function(df, row, col, exp, total_col) {
     df[row, col] <- NA
   }
   obs <- scoreUPDRS(df)[, total_col] # total score if specified values are NA
-  stopifnot(obs == exp) # compare observed total score with expected
+  stopifnot(obs == exp)
+  # compare observed total score with expected
 }
 
 ####### Functions testing scoreUPDRS(): An error will be produced if tests do not pass. 
 
 ## Test function for "on" UPDRS Part III
-scoreUPDRS3Test <- function(dat) {
+scoreOnUPDRS3Test <- function(dat) {
   ######################
   #### Test Missing ####
   ######################
@@ -70,7 +71,7 @@ scoreUPDRS3Test <- function(dat) {
 }
 
 #### Function for "on" UPDRS Part IV
-scoreUPDRS4Test <- function(dat) {
+scoreOnUPDRS4Test <- function(dat) {
   ###########################
   ###### TEST MISSING #######
   ###########################
@@ -86,14 +87,35 @@ scoreUPDRS4Test <- function(dat) {
   compare_total_with_NA(dat, 10, 196, c(0, 5, 6, 8, 1, 5, 2, 0, 7, 0, 6, 0, 1, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4), "on_updrs_4_total")
   
   # row: 0, column: 197
-  compare_total_with_NA(dat, 0, 197, c(0, 5, 6, 7, 0, 5, 2, 0, 4, 0, 4, 0, 1, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4), "on_updrs_4_total")
+  compare_total_with_NA(dat, FALSE, 197, c(0, 5, 6, 7, 0, 5, 2, 0, 4, 0, 4, 0, 1, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4), "on_updrs_4_total")
 
   # print if all tests passed 
   print("All tests were successful.")
 }
 
+scoreOffUPDRS3Test <- function(dat) {
+  # row: 1 column: 504
+  compare_total_with_NA(dat, 1, 504, c(32, 40, 46, 19, 51, 46, 52, 40, 32, 48, 17, 35, 50, 32, 0, 0, 0, 0, 0, 0, 0, 0, 0, 26), "off_updrs_3_total")
+  
+  # row: 20 column: 518
+  compare_total_with_NA(dat, 20, 518, c(32, 40, 46, 19, 51, 46, 52, 40, 32, 48, 17, 35, 50, 32, 0, 0, 0, 0, 0, 0, 0, 0, 0, 26), "off_updrs_3_total")
+  
+  # row: 10 column: 541
+  compare_total_with_NA(dat, 10, 541, c(32, 40, 46, 19, 51, 46, 52, 40, 32, 48, 17, 35, 50, 32, 0, 0, 0, 0, 0, 0, 0, 0, 0, 26), "off_updrs_3_total")
+  
+  # row: 0 column: 542
+  compare_total_with_NA(dat, FALSE, 542, c(32, 40, 46, 19, 51, 46, 52, 40, 32, 48, 17, 35, 50, 32, 0, 0, 0, 0, 0, 0, 0, 0, 0, 26), "off_updrs_3_total")
+  
+  print("All tests were sucessful.")
+}
+
+## TODO: creae scoreOffUPDRS4Test when scores entered into REDCap
+
 # test on_updrs_3 items
-scoreUPDRS3Test(testdf)
+scoreOnUPDRS3Test(testdf)
 
 # testing on_updrs_4 itms
-scoreUPDRS4Test(testdf)
+scoreOnUPDRS4Test(testdf)
+
+# testing off_updrs_3_items
+scoreOffUPDRS3Test(testdf)
