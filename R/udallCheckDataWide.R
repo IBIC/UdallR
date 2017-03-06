@@ -94,9 +94,9 @@ udallCheckDataWide <- function(dat) {
     # check for missing age values
     missing_age <- is.na(dat$scage)
     warningIfNot(sum(missing_age) == 0, paste(sum(missing_age), "subjects missing age:",
-                                              paste(cdat[which(missing_age), "idnum"], collapse = ", ")))
+                                              paste(dat[which(missing_age), "idnum"], collapse = ", ")))
     
-    ## TODo:
+    ## TODO:
     # ADD TO udallCheckDataWideTest.R
 }
 
