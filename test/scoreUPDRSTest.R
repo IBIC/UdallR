@@ -2,12 +2,20 @@
 ##### Test script for scoreUDPRSTest function 
 #### ~ compares computed total score on the UPDRS Part III with expcted when original values are replaed
 #### by missing values 
-#### Before running function, set working directory to UdallR's parent directory 
-# source private scoreUPDRS.R functions
-source("UdallR/R/scoreUPDRS.R")
+#### Before running function, set working directory to UdallR's parent directory
 
-# test data frame from data of original data frame, read as csv and as data.frame
-testdf <- as.data.frame(read.csv("UdallR/data/test.csv"))
+##########################################
+############ Test Data Frame #############
+##########################################
+### read data/test.csv as data.frame
+test <- as.data.frame(read.csv("UdallR/data/test.csv"))
+
+# ##########################################
+# ########## Functions required ############
+# ########## Source to check    ############
+# ##########################################
+source("UdallR/R/scoreUPDRS.R") # testing this function so, we need to source it
+source("UdallR/R/warningIfNot.R") # neccessary for scoreUPDRS.R
 
 # Compares UPDRS score when desired (..., row, col, ...) dimensions are NA with expected vector.
 # 'row' is false when wanting to compare total with entire column as NA. 
@@ -65,9 +73,6 @@ scoreOnUPDRS3Test <- function(dat) {
   
   # row: 0 column: 196
   compare_total_with_NA(dat, FALSE, 196, c(19, 25, 30, 11, 45, 29, 41, 33, 19, 37, 14, 25, 30, 17, 3, 1, 0, 0, 0, 2, 0, 1, 0, 19), "on_updrs_3_total")
-
-  # print if all tests passed 
-  print("All tests were successful.")
 }
 
 #### Function for "on" UPDRS Part IV
@@ -88,9 +93,6 @@ scoreOnUPDRS4Test <- function(dat) {
   
   # row: 0, column: 197
   compare_total_with_NA(dat, FALSE, 197, c(0, 5, 6, 7, 0, 5, 2, 0, 4, 0, 4, 0, 1, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4), "on_updrs_4_total")
-
-  # print if all tests passed 
-  print("All tests were successful.")
 }
 
 scoreOffUPDRS3Test <- function(dat) {
@@ -105,17 +107,14 @@ scoreOffUPDRS3Test <- function(dat) {
   
   # row: 0 column: 542
   compare_total_with_NA(dat, FALSE, 542, c(32, 40, 46, 19, 51, 46, 52, 40, 32, 48, 17, 35, 50, 32, 0, 0, 0, 0, 0, 0, 0, 0, 0, 26), "off_updrs_3_total")
-  
-  print("All tests were sucessful.")
 }
 
-## TODO: creae scoreOffUPDRS4Test when scores entered into REDCap
+scoreOnUPDRS3Test(test) # test on_updrs_3
+scoreOnUPDRS4Test(test) # test on_updrs_4
+scoreOffUPDRS3Test(test) # test off_updrs_3
 
-# test on_updrs_3 items
-scoreOnUPDRS3Test(testdf)
+### TODO:
+## When off_updrs_4 are entered into redcap, create test function for these elements as well
 
-# testing on_updrs_4 itms
-scoreOnUPDRS4Test(testdf)
-
-# testing off_updrs_3_items
-scoreOffUPDRS3Test(testdf)
+# print if tests successful 
+print("All tests were sucessful.")

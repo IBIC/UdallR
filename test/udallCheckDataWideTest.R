@@ -5,7 +5,6 @@
 # 2) source this script
 #    ~ error messages should indicate erros within the udallCheckDataWide.R script 
 
-
 #########################################
 ########## Libraries ####################
 #########################################
@@ -22,21 +21,32 @@ library(evaluate) # load this library to evaluate error messages
 eval_error <- function(df, chexp) {
   ch <- evaluate("udallCheckDataWide(df)") # list of error information 
   if (length(ch) == 1) {
-    stopifnot(length(ch) == chexp)
-    #   do not conintue if no match with expected 
+    stopifnot(length(ch) == chexp) #   do not conintue if no match with expected 
   } else {
     warningIfNot(as.character(ch[[2]][1]) == chexp, paste(chexp)) # index through ch for error message, compare with expected
     #   do not continue if no match with expected 
   }
 }
 
-#################################
-
 ##########################################
 ############ Test Data Frame #############
 ##########################################
 
+source("UdallR/R/numericColumnsUPDRS.R")
+
 test <- as.data.frame(read.csv("UdallR/data/test.csv"))
+
+test <- numericColumnsUPDRS(test)
+
+## extend new cleaning items to test 
+
+# ##########################################
+# ########## Functions required ############
+# ########## Source to check    ############
+# ##########################################
+source("UdallR/R/scoreUPDRS.R") # testing this function so, we need to source it
+source("UdallR/R/warningIfNot.R") # neccessary for scoreUPDRS.R
+source("UdallR/R/checkNumericRange.R")
 
 ###########################################
 ############ Testing function #############
@@ -81,11 +91,15 @@ udallCheckDataWideTest <- function(df) {
   ###################################
   ### Testing UDALL scoring items ###
   
-  #scoreUPDRSTest()
+  ## TODO: check error messages for udallCheckDataWide ranges
+  
+  ###################################
+  ### Testing for missing age range #
+  
+  ## TODO: CHECK MISSING AGE RANGE
   
   print("udcallCheckDataWide function is working correctly")
 }
-
 
 udallCheckDataWideTest(test) # call to function 
 
