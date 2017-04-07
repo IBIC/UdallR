@@ -17,7 +17,7 @@ scoreUPDRS <- function(dat) {
                         "on_updrs_3_11", "on_updrs_3_12", "on_updrs_3_13", "on_updrs_3_14", "on_updrs_3_15_r", 
                         "on_updrs_3_15_l", "on_updrs_3_16_r", "on_updrs_3_16_l", "on_updrs_3_17_rue", 
                         "on_updrs_3_17_lue", "on_updrs_3_17_rle", "on_updrs_3_17_lle", "on_updrs_3_17_lipjaw", 
-                        "on_updrs_3_18", "on_updrs_3_hoehn_yahr")
+                        "on_updrs_3_18")
   
   # calculate total score of on UPDRS III; append to end of data frame
   dat[, "on_updrs_3_total"] <- apply(dat[,on_updrs_3_colnames],1,sum,na.rm=TRUE)
@@ -39,7 +39,7 @@ scoreUPDRS <- function(dat) {
                            "off_updrs_3_11", "off_updrs_3_12", "off_updrs_3_13", "off_updrs_3_14", "off_updrs_3_15_r", 
                            "off_updrs_3_15_l", "off_updrs_3_16_r", "off_updrs_3_16_l", "off_updrs_3_17_rue", 
                            "off_updrs_3_17_lue", "off_updrs_3_17_rle", "off_updrs_3_17_lle", "off_updrs_3_17_lipjaw", 
-                           "off_updrs_3_18", "off_updrs_3_hoehn_yahr")
+                           "off_updrs_3_18")
   
   # calculate total score of off UPDRS III; append to end of data frame
   dat[, "off_updrs_3_total"] <- apply(dat[,off_updrs_3_colnames],1,sum,na.rm=TRUE)
