@@ -79,6 +79,9 @@ udallCleanREDCapDataWide <- function(dat) {
     # score various assessments
     merged <- scoreFOG(merged)
     
+    # convert UPDRS scoring columns to numeric if not already
+    merged <- numericColumnsUPDRS(merged)
+    
     # score UPDRS total
     merged <- scoreUPDRS(merged)
 
@@ -88,7 +91,11 @@ udallCleanREDCapDataWide <- function(dat) {
     # compute scan age in years
     merged$scage <- as.numeric((as.Date(merged$on_mri_date) - as.Date(merged$on_mri_dob))/365)
     # score SAI
-    merged <-scoreSAI(merged)
+    merged <- scoreSAI(merged)
+    
+    # TODO: 
+    ### 1 ) ADD NEW CLEANING ITEMS TO data/test.csv
+    ### 2 ) change UPDRS columns to numeric if not already exported as such
 
     return(merged)
 }

@@ -5,7 +5,6 @@
 # 2) source this script
 #    ~ error messages should indicate erros within the udallCheckDataWide.R script 
 
-
 #########################################
 ########## Libraries ####################
 #########################################
@@ -22,23 +21,32 @@ library(evaluate) # load this library to evaluate error messages
 eval_error <- function(df, chexp) {
   ch <- evaluate("udallCheckDataWide(df)") # list of error information 
   if (length(ch) == 1) {
-    stopifnot(length(ch) == chexp)
-    #   do not conintue if no match with expected 
+    stopifnot(length(ch) == chexp) #   do not conintue if no match with expected 
   } else {
-    stopifnot(ch[[2]][1] == chexp) # index through ch for error message, compare with expected
+    warningIfNot(as.character(ch[[2]][1]) == chexp, paste(chexp)) # index through ch for error message, compare with expected
     #   do not continue if no match with expected 
   }
 }
 
-#################################
-
 ##########################################
 ############ Test Data Frame #############
 ##########################################
-test <- data.frame("idnum" = 1:10, "sex" = factor(rep(c(1,2), 5))) # small test data frame
-#   "idnum": subject IDs 1-10
-#   "sex": factors of 1 and 2 for two levels of gender
-#   n = 10 
+
+source("UdallR/R/numericColumnsUPDRS.R")
+
+test <- as.data.frame(read.csv("UdallR/data/test.csv"))
+
+test <- numericColumnsUPDRS(test)
+
+## extend new cleaning items to test 
+
+# ##########################################
+# ########## Functions required ############
+# ########## Source to check    ############
+# ##########################################
+source("UdallR/R/scoreUPDRS.R") # testing this function so, we need to source it
+source("UdallR/R/warningIfNot.R") # neccessary for scoreUPDRS.R
+source("UdallR/R/checkNumericRange.R")
 
 ###########################################
 ############ Testing function #############
@@ -49,16 +57,16 @@ udallCheckDataWideTest <- function(df) {
   #############################
   ### Testing Duplicate IDs ###
   # testing one duplicate 
-  df$idnum[3] <- 2
-  eval_error(df, "Duplicate IDs for  1 subjects: 2")
+  df$idnum[1] <- 100054
+  eval_error(df, "Duplicate IDs for  1 subjects: 100054")
   
   # testing a few duplicates
-  df$idnum[5:10] <- rep(c(1,2), 3)
-  eval_error(df, "Duplicate IDs for  2 subjects: 1 2")
+  df$idnum[5:10] <- rep(c(100044, 100054), 3)
+  eval_error(df, "Duplicate IDs for  2 subjects: 100044 100054")
   
   # testing all duplicates 
-  df$idnum[1:10] <- rep(c(3,4,5,6,7), 2)
-  eval_error(df,"Duplicate IDs for  5 subjects: 3 4 5 6 7")
+  df$idnum[1:10] <- rep(c(100044, 100054, 100165, 110213, 110280), 2)
+  eval_error(df,"Duplicate IDs for  5 subjects: 100044 100054 100165 110213 110280")
   #############################
   
   #############################
@@ -68,21 +76,30 @@ udallCheckDataWideTest <- function(df) {
   #   no error expected, length of error output list should be 1
   
   df$sex[5] <- NA # One missing value
-  eval_error(df, "Missing sex for  1 subjects:  5")
+  eval_error(df, "Missing sex for  1 subjects:  110280")
   #   compare character format of expected error message with error from output list
   
   df$sex[1:7] <- NA # Several (7) missing values
-  eval_error(df, "Missing sex for  7 subjects:  1 2 3 4 5 6 7")
+  eval_error(df, "Missing sex for  7 subjects:  100044 100054 100165 110213 110280 110281 110339")
   #   compare...expected...with error...
   
   df$sex <- NA # All values missing
-  eval_error(df, "Missing sex for  10 subjects:  1 2 3 4 5 6 7 8 9 10")
+  eval_error(df, "Missing sex for  24 subjects:  100044 100054 100165 110213 110280 110281 110339 110415 120445 120459 120520 120526 130542 140590 140593 140599 140605 150613 150623 150624 160630 160631 160633 160642")
   #   compare...expected...with error...
   #############################
   
+  ###################################
+  ### Testing UDALL scoring items ###
+  
+  ## TODO: check error messages for udallCheckDataWide ranges
+  
+  ###################################
+  ### Testing for missing age range #
+  
+  ## TODO: CHECK MISSING AGE RANGE
+  
   print("udcallCheckDataWide function is working correctly")
 }
-
 
 udallCheckDataWideTest(test) # call to function 
 

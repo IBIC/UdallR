@@ -86,5 +86,17 @@ udallCheckDataWide <- function(dat) {
     checkNumericRange(on_updrs_4_pd, 0, 4) 
     checkNumericRange(off_updrs_4_control, 0, 4)
     checkNumericRange(off_updrs_4_pd, 0, 4)
+    
+    
+    # TODO: 
+    # ADD TO udallCheckDataWideTest.R 
+    
+    # check for missing age values
+    missing_age <- is.na(dat$scage)
+    warningIfNot(sum(missing_age) == 0, paste(sum(missing_age), "subjects missing age:",
+                                              paste(dat[which(missing_age), "idnum"], collapse = ", ")))
+    
+    ## TODO:
+    # ADD TO udallCheckDataWideTest.R
 }
 
