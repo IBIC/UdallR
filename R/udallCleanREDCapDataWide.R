@@ -11,6 +11,7 @@ udallCleanREDCapDataWide <- function(dat) {
                                         # merge on and off
     on <- subset(dat, redcap_event_name=="on_arm_1")
     off <- subset(dat, redcap_event_name=="off_arm_1")
+    beh <- subset(dat, redcap_event_name=="behavioral_arm_1")
     # just throw in some assertions
     stopifnot(dim(on)[1] >= dim(off)[1])
     # remove missing or empty columns from data frames
@@ -24,6 +25,16 @@ udallCleanREDCapDataWide <- function(dat) {
     blank[is.na(blank)] <- TRUE
     on <- on[,blank]
 
+    behcolnames <- c("idnum", "off_axcpt_correctdetection",
+"off_axcpt_falsealarm", "off_axcpt_correctnontarget",
+"off_axcpt_rawdiff", "off_axcpt_dprime", "off_axcpt_rtcd",
+"off_axcpt_rtcntd", "on_axcpt_correctdetection", "on_axcpt_falsealarm",
+"on_axcpt_correctnontarget","on_axcpt_rawdiff","on_axcpt_dprime",
+"on_axcpt_rtcd","on_axcpt_rtcntd", "ant_acc", "ant_rt",
+"ant_alerting_all","ant_alerting_correct", "ant_orienting_all",
+"ant_orienting_correct", "ant_conflict_correct","ant_conflict_all")
+
+    beh <- beh[,behcolnames]
     # rename columns for off and on conditions
     colnames(off) <- paste("off_", colnames(off),sep="")
     colnames(on) <- paste("on_", colnames(on),sep="")
@@ -41,6 +52,9 @@ udallCleanREDCapDataWide <- function(dat) {
 
     # merge these data frames together from idnum
     merged <- merge(on, off, by="idnum", all.x=TRUE, all.y=TRUE)
+                                        # merge in the behavioral data
+    merged <- merge(merged, beh, by="idnum", all.x=TRUE,all.y=TRUE)
+                       
 
     # We will create a couple of useful variables here
     #create sex variable
@@ -72,7 +86,7 @@ udallCleanREDCapDataWide <- function(dat) {
     merged$educ <- merged$on_health_demo_years_educ
     
     # compute scan age in years
-    merged$scage <- (as.Date(merged$on_mri_date) - as.Date(merged$on_mri_dob))/365
+    merged$scage <- as.numeric((as.Date(merged$on_mri_date) - as.Date(merged$on_mri_dob))/365)
     # score SAI
     merged <-scoreSAI(merged)
 
