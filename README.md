@@ -21,7 +21,7 @@ For more information, see REDCap's documentation of API tokens: https://redcap.i
 ## Loading the library functions
 See this very helpful tutorial on creating an R library. https://hilaryparker.com/2014/04/29/writing-an-r-package-from-scratch/
 
-You should probably have packages `devtools` and `roxygen` installed to work with this package. From the parent working directory that contains the UdallR folder, you should do the following:
+You should probably have packages `devtools` and `roxygen2` installed to work with this package. From the parent working directory that contains the UdallR folder, you should do the following:
 
 ```R
 setwd("..")
