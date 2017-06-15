@@ -34,6 +34,8 @@ You would use them using code that looks something like this, where you substitu
 ```R
 require(REDCapR)
 library(REDCapR)
+library(UdallR)
+
 dat <- as.data.frame(redcap_read(redcap_uri="https://redcap.iths.org/api/", token="INSERTTOKENHERE"))
 
 cdat <- udallCleanREDCapDataWide(dat)
