@@ -1,0 +1,25 @@
+Code,Meaning,Notes
+-800,Data not provided,"Test question was asked by the site, but a value for the subject was not provided to us"
+-801,Not administered by site,Test question is not asked by the site
+-802,Test not administered,Whole test was not administered
+-803,No record,No record was created in the database
+-804,Blank record,"A record was created in the database, but everything was left blank"
+-810,No family PD history information,Only applies to PD family history information
+-811,"No reported history, but missing some information",Only applies to PD family history information
+-812,Cant divide by 0,Only applies to values calculated by Data Core
+-813,No education info to calculate,Only applies to the MoCA
+-814,ON only,Only applies to Original UPDRS parts 1 and 2
+-888,Incalculatable,One or more of the values necessary for the calculation is missing
+-900,Not administered,Test question was not administered
+-901,Unable to complete,
+-902,Unwilling to complete,
+-903,Not transcribed,
+-904,Unknown,
+-905,Not applicable,
+-906,Tube failed,Only applies to lab data
+-994,Out of range,Only applies to standardized scores. Means there is a raw score but cant calculate a z-score based on the raw score value
+-995,Out of p-value range,Only applies if a z-score was calculated but no p-value was calculated
+-996,No shipley score,Only applies to z-score minus shipley z-score values
+-997,No raw score,Only applies to standardized scores (z-scores)
+-998,Other problem/missing,
+-999,Went over maximum time,Only applies to trails time data
