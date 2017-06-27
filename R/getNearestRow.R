@@ -1,13 +1,4 @@
-#' Takes an ID number and scan date, and returns
-#' @param x Row from cleaned to examine.
-#' @param multivis Database from analytic sites (MS ACCESS).
-#' @param verbose Display informational messages
-#' @return nearest.row Row containing appropriate information for the visit
-#' nearest the scan date given.
-#' @export
-#'
-
-get.nearest.row <- function(x, multivis, verbose = FALSE)
+getNearestRow <- function(x, multivis)
 {
   # Parse input
   # v <- as.vector(unlist(x))
@@ -18,7 +9,7 @@ get.nearest.row <- function(x, multivis, verbose = FALSE)
   new.id <- paste0("PWA", substr(ID, 1, 2), "-", substr(ID, 3, 6))
 
   # Row for when there's errors
-  na.row <- rep(NA, ncol(subj.subset))
+  na.row <- rep(NA, ncol(multivis))
   na.row[1] <- new.id
 
   if (is.na(age))
@@ -56,17 +47,12 @@ get.nearest.row <- function(x, multivis, verbose = FALSE)
     # Get the row closest in age to the patient's MRI visit.
     nearest.row <- subj.subset[which.min(dates.diff), ]
 
-    if (verbose)
-    {
-      print(paste0(ID, "'s visit was ",
-                   round(min(dates.diff, na.rm = TRUE) * 12,digits = 2),
-                 " months away."))
-    }
   } else {
     warning(paste(ID, " has no valid ages to compare to. Returning NA row"))
 
     nearest.row <- na.row
   }
 
-  return(unlist(unname(nearest.row)))
+
+  return(unlist(nearest.row))
 }
