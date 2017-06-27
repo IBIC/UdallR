@@ -14,4 +14,3 @@ warningIfNot(condition, message)
 \description{
 Give a warning if the condition is not true, consisting of message
 }
-

@@ -10,7 +10,7 @@ will not stop if there is a problem.}
 udallCheckDataWide(dat)
 }
 \arguments{
-\item{dat}{Data frame that has been processed and cleaned (missing codes replaced with NA}
+\item{dat}{Data frame that has been processed and cleaned missing codes replaced with NA}
 }
 \description{
 Check the data that have been processed by udallCleanREDCapDataWide
@@ -18,4 +18,3 @@ This function contains arbitrary sanity checks to make sure that there
 are no obvious errors in the data. It will issue warnings, but currently
 will not stop if there is a problem.
 }
-

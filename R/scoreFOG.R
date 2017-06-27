@@ -1,6 +1,7 @@
 #' Score Freezing of Gait Instrument
 #' @param dat Input data frame with fog variables
-#' @return dat New data frame with FOG score added to it 
+#' @return dat New data frame with FOG score added to it
+#' @export
 
 scoreFOG <-function(dat) {
     names <- colnames(dat)
@@ -8,4 +9,4 @@ scoreFOG <-function(dat) {
     dat$on_fog_total <- apply(fog,1,sum,na.rm=TRUE)
     return(dat)
 }
-                
+

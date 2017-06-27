@@ -1,7 +1,8 @@
 #' Score Freezing of Gait Instrument
 #' @param dat Input data frame with freesurfer variables
 #' @return dat New data frame with freesurfer variables renamed
-#' 
+#' @export
+#'
 
 renameFreeSurfer <- function(dat) {
 library(data.table)
@@ -91,4 +92,4 @@ dat$acc <- dat$lh_g_and_s_cingulant+dat$rh_g_and_s_cingulant
 dat$ips <- dat$rh_s_intrapariet_and_p_trans+dat$lh_s_intrapariet_and_p_trans
 dat
 }
-    
+

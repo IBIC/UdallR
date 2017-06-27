@@ -15,4 +15,3 @@ dat New data frame with FOG score added to it
 \description{
 Score Freezing of Gait Instrument
 }
-

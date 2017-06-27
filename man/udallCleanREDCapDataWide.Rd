@@ -2,17 +2,17 @@
 % Please edit documentation in R/udallCleanREDCapDataWide.R
 \name{udallCleanREDCapDataWide}
 \alias{udallCleanREDCapDataWide}
-\title{Clean up the data that come from redcap Udall}
+\title{Clean up the data that come from Udall REDCap database}
 \usage{
-udallCleanREDCapDataWide(dat)
+udallCleanREDCapDataWide(dat, visit = 1)
 }
 \arguments{
 \item{dat}{Data frame that comes directly from redcap_read}
 }
 \value{
-A cleaned data frame, with NA and empty columns removed, on or off prepended to the names, and all subject data on a single row (wide format)
+A cleaned data frame, with NA and empty columns removed, on or off
+prepended to the names, and all subject data on a single row (wide format)
 }
 \description{
-Clean up the data that come from redcap Udall
+Clean up the data that come from Udall REDCap database
 }
-

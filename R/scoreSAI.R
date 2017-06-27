@@ -1,6 +1,7 @@
 #' Score SAI
 #' @param dat Input data frame with SAI variables
-#' @return dat New data frame with SAI score added to it 
+#' @return dat New data frame with SAI score added to it
+#' @export
 
 scoreSAI <-function(dat) {
     names <- colnames(dat)
@@ -13,7 +14,7 @@ scoreSAI <-function(dat) {
         (dat$on_sai_n20_4_amp/dat$on_sai_n20_uncond_amp)*100,
         (dat$on_sai_n20_5_amp/dat$on_sai_n20_uncond_amp)*100)
     dat$on_sai_sai <- apply(sai, 1, mean)
-    
+
     return(dat)
 }
-                
+

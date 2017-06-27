@@ -15,4 +15,3 @@ dat Data frame with missing data codes assigned to NA
 \description{
 Replace missing data codes with NA for analysis
 }
-
