@@ -53,6 +53,10 @@ getNearestRow <- function(x, multivis)
     nearest.row <- na.row
   }
 
+  # Turn factors into strings, otherwise they get discombobulated and written
+  ## to csv as numerics instead, which isn't at all valuable.
+  nr.factor <- sapply(nearest.row, is.factor)
+  nearest.row[nr.factor] <- lapply(nearest.row[nr.factor],)
 
   return(unlist(nearest.row))
 }
