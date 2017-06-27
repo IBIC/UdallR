@@ -7,12 +7,26 @@
 udallCleanREDCapDataWide(dat, visit = 1)
 }
 \arguments{
-\item{dat}{Data frame that comes directly from redcap_read}
+\item{dat}{Data frame that comes directly from redcap_read.}
+
+\item{visit}{Which visit to use (1 or 2). Defaults to 1.}
 }
 \value{
 A cleaned data frame, with NA and empty columns removed, on or off
-prepended to the names, and all subject data on a single row (wide format)
+prepended to the names, and all subject data on a single row (wide format).
+Removes all subjects who have been flagged in REDCap as unanalyzable (for
+whatever reason).
 }
 \description{
-Clean up the data that come from Udall REDCap database
+Takes a data frame downloaded directly from REDCap using the redcap_read()
+function, and prunes it, to remove NAs and empty columns, and appends "on"
+or "off where necessary."
+}
+\examples{
+dat <- as.data.frame(redcap_read(
+redcap_uri="https://redcap.iths.org/api/",
+token=rc.token), stringsAsFactors = FALSE)
+
+cdat <- udallCleanREDCapDatawide(dat, 1)
+
 }
