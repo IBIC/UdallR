@@ -35,7 +35,7 @@ udallCleanREDCapDataWide <- function(dat, visit = 1) {
 
   on <- subset(dat, redcap_event_name == paste0("on_", arm))
   off <- subset(dat, redcap_event_name == paste0("off_", arm))
-  beh <- subset(dat, redcap_event_name == paste0("behavioral_", arm_1))
+  beh <- subset(dat, redcap_event_name == paste0("behavioral_", arm))
 
   # Analyze column is the same either way
   analyze <- subset(dat, redcap_event_name == "analyze_arm_4")
@@ -88,7 +88,7 @@ udallCleanREDCapDataWide <- function(dat, visit = 1) {
   # merge these data frames together from idnum
   merged <- merge(on, off, by="idnum", all.x=TRUE, all.y=TRUE)
   # merge in the behavioral data
-  merged <- merge(merged, beh, by="idnum", all.x=TRUE,all.y=TRUE)
+  merged <- merge(merged, beh, by="idnum", all.x=TRUE, all.y=TRUE)
 
   # Add information about whether to analyze a subject
   analyze.cols <- c("analyze_visit_1", "analyze_visit_2")
@@ -97,15 +97,15 @@ udallCleanREDCapDataWide <- function(dat, visit = 1) {
   merged <- merge(merged, analyze.df, by = "idnum", all.x = TRUE, all.y = TRUE)
 
   # We will create a couple of useful variables here
-  #create sex variable
+  # Create sex variable
   merged$sex <- merged$on_health_demo_sex
-  merged$sex[ merged$sex > 2] <- NA
+  merged$sex[ ! merged$sex %in% 1:2 ] <- NA
   merged$sex <- as.factor(merged$sex)
   levels(merged$sex) <- c("male", "female")
 
   #create ethnicity variable
   merged$ethnicity <- merged$on_health_demo_ethnic
-  merged$ethnicity[merged$ethnicity > 2] <- NA
+  merged$ethnicity[ ! merged$ethnicity %in% 1:2 ] <- NA
   merged$ethnicity <- as.factor(merged$ethnicity)
   levels(merged$ethnicity) <- c("hispanic", "not_hispanic")
 
@@ -136,9 +136,8 @@ udallCleanREDCapDataWide <- function(dat, visit = 1) {
 
   # TODO:
   ### 1 ) ADD NEW CLEANING ITEMS TO data/test.csv
-  ### 2 ) change UPDRS columns to numeric if not already exported as such
 
-  # Must check visits as == TRUE as not to introduce NAs
+  # cross with !is.na so no NAs are introduced.
   if (visit == 1)
   {
     merged <- merged[merged$analyze_visit_1 & !is.na(merged$analyze_visit_1), ]

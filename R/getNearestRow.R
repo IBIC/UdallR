@@ -1,3 +1,13 @@
+#' Get analytic site visit nearest MRI visit
+#'
+#' Takes a row of the REDCap data and compares it to the multivis data that
+#' contains infromation for each subject's analytic site visit.
+#'
+#' @param x Row of REDCap data to use to identify analytic site visit.
+#' @param multivis The data frame containing the analytic site information.
+#'
+#' @export
+
 getNearestRow <- function(x, multivis)
 {
   # Parse input
@@ -56,7 +66,7 @@ getNearestRow <- function(x, multivis)
   # Turn factors into strings, otherwise they get discombobulated and written
   ## to csv as numerics instead, which isn't at all valuable.
   nr.factor <- sapply(nearest.row, is.factor)
-  nearest.row[nr.factor] <- lapply(nearest.row[nr.factor],)
+  nearest.row[nr.factor] <- lapply(nearest.row[nr.factor], as.character)
 
   return(unlist(nearest.row))
 }

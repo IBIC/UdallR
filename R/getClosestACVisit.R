@@ -17,27 +17,32 @@
 #' @export
 #'
 
-getClosestACVisit <- function(dat, file.name = NULL, multivis.file = NULL)
+getClosestACVisit <- function(dat, file.name = NULL, multivis.df = NULL,
+                              multivis.file = NULL)
 {
 
-  if (is.null(multivis.file))
+  if (is.null(multivis.file) & is.null(multivis.df))
   {
-    # This must be updated manually if a newer file is added.
-    # data() command attaches frame under the name given
-    data("panuc_multivis_2017_04_25")
-
-    # Move default name to other name.
-    multivis.dat <- panuc_multivis_2017_04_25
+    stop("Either multivis file or multivis data frame must be set.")
   }
-  else
+  else if (!is.null(multivis.df))
+  {
+    multivis.dat <- multivis.df
+  }
+  else if (!is.null(multivis.file))
   {
     multivis.dat <- read.csv(multivis.file, header = TRUE,
                               stringsAsFactors = FALSE)
     colnames(multivis.dat) <- tolower(colnames(multivis.dat))
   }
+  else if (!is.null(multivis.df) & !is.null(multivis.file))
+  {
+    stop("Cannot set both multivis file and multivis data frame.")
+  }
 
   # Get the nearest row from the multivis based on the REDCap data (dat)
-  closest.visit <- as.data.frame(t(apply(dat, 1, getNearestRow,
+  closest.visit <- as.data.frame(t(apply(X = dat, MARGIN = 1,
+                                         FUN = UdallR::getNearestRow,
                                          multivis = multivis.dat)))
   colnames(closest.visit) <- colnames(multivis.dat)
 

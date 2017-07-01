@@ -24,8 +24,8 @@ or "off where necessary."
 }
 \examples{
 dat <- as.data.frame(redcap_read(
-redcap_uri="https://redcap.iths.org/api/",
-token=rc.token), stringsAsFactors = FALSE)
+   redcap_uri="https://redcap.iths.org/api/",
+   token=rc.token), stringsAsFactors = FALSE)
 
 cdat <- udallCleanREDCapDatawide(dat, 1)
 

@@ -4,7 +4,8 @@
 \alias{getClosestACVisit}
 \title{Get the closest analytic site visits.}
 \usage{
-getClosestACVisit(dat, file.name = NULL, multivis.file = NULL)
+getClosestACVisit(dat, file.name = NULL, multivis.df = NULL,
+  multivis.file = NULL)
 }
 \arguments{
 \item{dat}{Cleaned REDCap data}
