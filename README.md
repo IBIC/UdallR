@@ -40,3 +40,10 @@ dat <- as.data.frame(redcap_read(redcap_uri="https://redcap.iths.org/api/", toke
 
 cdat <- udallCleanREDCapDataWide(dat)
 ```
+
+## Important notes
+
+A few important notes regarding `UdallR` and its presence on GitHub.
+
++ Make sure not to commit your REDCap API key to GitHub, your key is for you and you only. See `example.R` for an exxample of how to save your key locally and avoid uploading it to GitHub.
++ Do not distribute this repo. The `data/` directory has two data files (`.rda` extensions) that contain sensitive and protected information.

@@ -1,7 +1,7 @@
 
 #' @export
 
-udallCheckRCAndMultivis <- function(redcap.data, multivis, error.file)
+udallCrosscheckEntries <- function(redcap.data, error.file)
 {
   if (file.exists(error.file))
   {

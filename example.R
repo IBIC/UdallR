@@ -33,16 +33,8 @@ cdat <- udallCleanREDCapDataWide(dat, visit = 1)
 # Test the UdallR data-checking function
 checked <- udallCheckDataWide(cdat, error.file = "REDCap-errors.txt")
 
-# Load the multivis (built into UdallR package) that has the information from
-## the analytic site visits.
-attach(panuc_multivis_2017_04_25)
-
-# Get from the multivis file the closest analytic site visit to the MRI visits
-closestVisits <- getClosestACVisit(checked,
-                                   multivis.df = panuc_multivis_2017_04_25)
 
 # Test the UdallR cross-checking function that checks for inconsistencies in
 ## data uploaded to REDCap by IBIC and the data in the MS Access database
 ## maintained by the Udall team.
-udallCheckRCAndMultivis(cdat, closestVisits,
-                        error.file = "mismatch-errors.txt")
+udallCrosscheckEntries(cdat, error.file = "mismatch-errors.txt")

@@ -2,7 +2,12 @@
 #' This function contains arbitrary sanity checks to make sure that there
 #' are no obvious errors in the data. It will issue warnings, but currently
 #' will not stop if there is a problem.
-#' @param dat Data frame that has been processed and cleaned missing codes replaced with NA
+#'
+#' @param dat Data frame that has been processed and cleaned missing codes
+#' replaced with NA
+#' @param error.file A string that has the location of a file to save error
+#' descriptions too.
+#'
 #' @export
 
 
@@ -14,24 +19,28 @@ udallCheckDataWide <- function(dat, error.file) {
       file.remove(error.file)
     }
 
+    write(paste("subject", "status", "description", "variable.name",
+                sep = "\t"),
+          file = error.file)
+
     # make sure subjects have unique ids
     # would be useful to print out any duplicates if there is an issue
     dupl_id <- sort(unique(dat$idnum[duplicated(dat$idnum)]))
-    warningIfNot(sum(duplicated(dat$idnum)) == 0,
-                 paste("Duplicate IDs for ", length(dupl_id), "subjects:",
-                       paste(dupl_id, collapse = " ")))
+    # warningIfNot(sum(duplicated(dat$idnum)) == 0,
+    #              paste("Duplicate IDs for ", length(dupl_id), "subjects:",
+    #                    paste(dupl_id, collapse = " ")))
 
     logError(dat, duplicated(dat$idnum), problem = "duplicate ID",
-             save.file = "errors.txt")
+             variable = "idnum", save.file = error.file)
 
     # make sure we have basic demographic data
     miss_sex <- sort(dat$idnum[is.na(dat$sex)])
-    warningIfNot(sum(is.na(dat$sex)) == 0,
-                 paste("Missing sex for ", length(miss_sex), "subjects: ",
-                       paste(miss_sex,collapse = " ")))
+    # warningIfNot(sum(is.na(dat$sex)) == 0,
+    #              paste("Missing sex for ", length(miss_sex), "subjects: ",
+    #                    paste(miss_sex,collapse = " ")))
 
-    logError(dat, is.na(dat$sex), problem = "missing sex",
-             save.file = "errors.txt")
+    logError(dat, is.na(dat$sex), problem = "missing sex", variable = "sex",
+             save.file = error.file)
 
     ##### Check UPDRS scoring items column range values
     # column names of on_updrs_3 scoring items that are not hoens and yahr
@@ -63,7 +72,8 @@ udallCheckDataWide <- function(dat, error.file) {
 
     # Log subjects who have no group assignment.
 
-    logError(dat, is.na(dat$group), "missing group", error.file)
+    logError(dat, is.na(dat$group), "missing group", variable = "group",
+             error.file)
 
     # create data frame for each both control and pd groups and for off/on conditions
     on_updrs_3_control <- data.frame(dat[dat$group == "control",
@@ -124,13 +134,13 @@ udallCheckDataWide <- function(dat, error.file) {
 
     # check for missing age values
     missing_age <- is.na(dat$scage)
-    warningIfNot(sum(missing_age) == 0, paste(sum(missing_age),
-                                              "subjects missing age:",
-                                              paste(dat[which(missing_age),
-                                                        "idnum"],
-                                                    collapse = ", ")))
+    # warningIfNot(sum(missing_age) == 0, paste(sum(missing_age),
+    #                                           "subjects missing age:",
+    #                                           paste(dat[which(missing_age),
+    #                                                     "idnum"],
+    #                                                 collapse = ", ")))
 
-    logError(dat, is.na(dat$scage), "missing age", error.file)
+    logError(dat, is.na(dat$scage), "missing age", variable = "scage", error.file)
 
     ## Check behavioral data
 
@@ -141,54 +151,60 @@ udallCheckDataWide <- function(dat, error.file) {
       # If they scored exactly 0 on any of the AXCPT tasks in the on sesion,
       ## report them.
       if (grepl("on", col))
-        logError(dat, dat[, col] == 0, paste("0% correct rate:", col),
-                 error.file)
+        logError(dat, dat[, col] == 0, "0% accuracy", variable = col,
+                 warning = TRUE, error.file)
       else if (grepl("off", col))
       {
         # If they scored exactly 0 on the AXCPT off tasks; and are PD (the
         ## only group to do them), report them.
         is.pd <- dat$group == "pd" & !is.na(dat$group)
         logError(dat, dat[, col] == 0 & is.pd,
-                 paste("0% AXCPT accuracy:", col), error.file)
+                 "0% AXCPT accuracy", variable = col, warning = TRUE,
+                 error.file)
       }
     }
 
     # Log all subjects who got a 0 on their ant.
-    logError(dat, dat$ant_acc == 0 & !is.na(dat$ant_acc),
-             "0% ANT accuracy", error.file)
+    logError(dat, dat$ant_acc == 0 & !is.na(dat$ant_acc), "0% ANT accuracy",
+             variable = "ant_acc", warning = TRUE, error.file)
 
     # Log all subjects who have an NA in the rt column if accuracy is above 0
     logError(dat,
              dat$off_axcpt_correctdetection > 0 & is.na(dat$off_axcpt_rtcd),
-             paste("RT <NA>:", "off_axcpt_rtcd"), error.file)
+             "RT <NA>:", variable = "off_axcpt_rtcd", error.file)
     logError(dat,
              dat$off_axcpt_correctnontarget > 0 & is.na(dat$off_axcpt_rtcntd),
-             paste("RT <NA>:", "off_axcpt_rtcntd"), error.file)
+             "RT <NA>:", variable = "off_axcpt_rtcntd", error.file)
     logError(dat,
              dat$on_axcpt_correctdetection > 0 & is.na(dat$on_axcpt_rtcd),
-             paste("RT <NA>:", "on_cpt_rtcd"), error.file)
+             "RT <NA>:", variable = "on_cpt_rtcd", error.file)
     logError(dat,
              dat$on_axcpt_correctnontarget > 0 & is.na(dat$on_axcpt_rtcntd),
-             paste("RT <NA>:", "on_axcpt_rtcntd"), error.file)
+             "RT <NA>:", variable = "on_axcpt_rtcntd", error.file)
 
     # Report missing off in pd
     is.pd <- dat$group == "pd" & !is.na(dat$group)
 
     # If they are PD, and are missing axcpt off data, report them
     logError(dat, is.pd & is.na(dat$off_axcpt_correctdetection),
-             "AXCPT OFF missing (PD)", error.file)
+             "AXCPT OFF missing for PD", variable = "off_axcpt_correctdetection",
+             error.file)
 
     # If they are controls, and have OFF data, report them.
     logError(dat, !is.pd & !is.na(dat$off_axcpt_correctdetection),
-             "AXCPT OFF present for control", error.file)
+             "AXCPT OFF for control",
+             variable = "off_axcpt_correctdetection", error.file)
 
 
-    logError(dat, is.na(dat$on_sai_sai), "missing SAI data", error.file)
+    logError(dat, is.na(dat$on_sai_n20_4_amp), "missing SAI data",
+             variable = "on_sai_n20_4_amp", error.file)
 
-    logError(dat, is.na(dat$on_fog_q1), "missing FOG Q1 entry", error.file)
+    logError(dat, is.na(dat$on_fog_q1), "missing FOG Q1 entry",
+             variable = "on_fog_q1", error.file)
 
     logError(dat, dat$on_fog_q1 == 1 & !is.na(dat$on_fog_q1) & is.na(dat$on_fog_total),
-             "Indicated FOG; but total score is NA", error.file)
+             "Indicated FOG; but total score is NA", variable = "on_fog_q1",
+             error.file)
 
     ## TODO:
     # ADD TO udallCheckDataWideTest.R

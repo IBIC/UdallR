@@ -40,6 +40,10 @@ udallCleanREDCapDataWide <- function(dat, visit = 1) {
   # Analyze column is the same either way
   analyze <- subset(dat, redcap_event_name == "analyze_arm_4")
 
+  # Arm 3, which has the closests visit that has been reuploaded to REDCap
+  closest.visit <- subset(dat, redcap_event_name == "visit_for_mri_1_arm_3")
+
+
   # just throw in some assertions
   stopifnot(dim(on)[1] >= dim(off)[1])
 
@@ -53,6 +57,11 @@ udallCleanREDCapDataWide <- function(dat, visit = 1) {
   blank <- colSums(on=="") <= nrow(on)
   blank[is.na(blank)] <- TRUE
   on <- on[,blank]
+
+  # closest.visit <- closest.visit[,colSums(is.na(closest.visit)) < nrow(closest.visit)]
+  # blank <- colSums(closest.visit=="") <= nrow(closest.visit)
+  # blank[is.na(blank)] <- TRUE
+  # closest.visit <- closest.visit[,blank]
 
   axcpt.cols <- c("off_axcpt_correctdetection",
                   "off_axcpt_falsealarm", "off_axcpt_correctnontarget",
@@ -72,11 +81,13 @@ udallCleanREDCapDataWide <- function(dat, visit = 1) {
 
   beh <- beh[, behcolnames]
   # rename columns for off and on conditions
-  colnames(off) <- paste("off_", colnames(off),sep="")
-  colnames(on) <- paste("on_", colnames(on),sep="")
+  colnames(off) <- paste0("off_", colnames(off))
+  colnames(on) <- paste0("on_", colnames(on))
   # fix double on and double off and idnum variables
   colnames(on) <- gsub("on_on", "on", colnames(on))
   colnames(off) <- gsub("off_off", "off", colnames(off))
+
+  colnames(closest.visit) <- paste0("closest_", colnames(closest.visit))
 
   # fix freesurfer names
   on <- renameFreeSurfer(on)
@@ -86,9 +97,12 @@ udallCleanREDCapDataWide <- function(dat, visit = 1) {
   names(off)[names(off)=="off_idnum"]  <- "idnum"
 
   # merge these data frames together from idnum
-  merged <- merge(on, off, by="idnum", all.x=TRUE, all.y=TRUE)
+  merged <- merge(on, off, by = "idnum", all.x = TRUE, all.y = TRUE)
   # merge in the behavioral data
-  merged <- merge(merged, beh, by="idnum", all.x=TRUE, all.y=TRUE)
+  merged <- merge(merged, beh, by = "idnum", all.x = TRUE, all.y = TRUE)
+
+  merged <- merge(merged, closest.visit, by.x = "idnum", by.y = "closest_idnum",
+                  all.x = TRUE, all.y = TRUE)
 
   # Add information about whether to analyze a subject
   analyze.cols <- c("analyze_visit_1", "analyze_visit_2")

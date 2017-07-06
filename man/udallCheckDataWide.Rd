@@ -10,7 +10,11 @@ will not stop if there is a problem.}
 udallCheckDataWide(dat, error.file)
 }
 \arguments{
-\item{dat}{Data frame that has been processed and cleaned missing codes replaced with NA}
+\item{dat}{Data frame that has been processed and cleaned missing codes
+replaced with NA}
+
+\item{error.file}{A string that has the location of a file to save error
+descriptions too.}
 }
 \description{
 Check the data that have been processed by udallCleanREDCapDataWide
