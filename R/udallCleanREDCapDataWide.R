@@ -87,8 +87,6 @@ udallCleanREDCapDataWide <- function(dat, visit = 1) {
   colnames(on) <- gsub("on_on", "on", colnames(on))
   colnames(off) <- gsub("off_off", "off", colnames(off))
 
-  colnames(closest.visit) <- paste0("closest_", colnames(closest.visit))
-
   # fix freesurfer names
   on <- renameFreeSurfer(on)
 
@@ -99,14 +97,18 @@ udallCleanREDCapDataWide <- function(dat, visit = 1) {
   # merge these data frames together from idnum
   merged <- merge(on, off, by = "idnum", all.x = TRUE, all.y = TRUE)
   # merge in the behavioral data
-  merged <- merge(merged, beh, by = "idnum", all.x = TRUE, all.y = TRUE)
+  merged <- merge(merged, beh, by = "idnum", all.x = TRUE)
 
-  merged <- merge(merged, closest.visit, by.x = "idnum", by.y = "closest_idnum",
-                  all.x = TRUE, all.y = TRUE)
+  new.columns <- colnames(closest.visit)[!(colnames(closest.visit) %in% colnames(merged))]
+
+  cv2merge <- closest.visit[, c("idnum", new.columns)]
+
+  merged <- merge(merged, cv2merge, by = "idnum")
 
   # Add information about whether to analyze a subject
-  analyze.cols <- c("analyze_visit_1", "analyze_visit_2")
-  analyze.df <- analyze[, c("idnum", analyze.cols)]
+  analyze.df <- analyze[, c("idnum", "analyze_visit_1", "analyze_visit_2")]
+
+  analyze.df[, 2:3] <- apply(analyze.df[, 2:3], 2, as.logical)
 
   merged <- merge(merged, analyze.df, by = "idnum", all.x = TRUE, all.y = TRUE)
 

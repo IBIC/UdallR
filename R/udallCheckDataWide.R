@@ -187,8 +187,8 @@ udallCheckDataWide <- function(dat, error.file) {
 
     # If they are PD, and are missing axcpt off data, report them
     logError(dat, is.pd & is.na(dat$off_axcpt_correctdetection),
-             "AXCPT OFF missing for PD", variable = "off_axcpt_correctdetection",
-             error.file)
+             "AXCPT OFF missing for PD",
+             variable = "off_axcpt_correctdetection", error.file)
 
     # If they are controls, and have OFF data, report them.
     logError(dat, !is.pd & !is.na(dat$off_axcpt_correctdetection),
@@ -196,13 +196,14 @@ udallCheckDataWide <- function(dat, error.file) {
              variable = "off_axcpt_correctdetection", error.file)
 
 
-    logError(dat, is.na(dat$on_sai_n20_4_amp), "missing SAI data",
-             variable = "on_sai_n20_4_amp", error.file)
+    logError(dat, is.na(dat$on_sai_sai), "unable to calculate SAI",
+             variable = "on_sai_sai", warning = TRUE, error.file)
 
     logError(dat, is.na(dat$on_fog_q1), "missing FOG Q1 entry",
              variable = "on_fog_q1", error.file)
 
-    logError(dat, dat$on_fog_q1 == 1 & !is.na(dat$on_fog_q1) & is.na(dat$on_fog_total),
+    logError(dat,
+             dat$on_fog_q1 == 1 & !is.na(dat$on_fog_q1) & is.na(dat$on_fog_total),
              "Indicated FOG; but total score is NA", variable = "on_fog_q1",
              error.file)
 

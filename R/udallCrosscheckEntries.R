@@ -62,23 +62,26 @@ udallCrosscheckEntries <- function(redcap.data, error.file)
 
 
   logError(redcap.data, is.na(redcap.data$on_updrs_3_total),
-           "UPDRS ON in REDCap is NA",variable = "on_updrs_3_total", error.file)
+           "UPDRS ON in REDCap is NA", variable = "on_updrs_3_total",
+           error.file)
 
-  logError(redcap.data, is.na(redcap.data$off_updrs_3_total),
-           "UPDRS OFF in REDCap is NA", variable = "off_updrs_3_total",
+  logError(redcap.data,
+           is.na(redcap.data$off_updrs_3_total) & redcap.data$group == "pd",
+           "patient UPDRS OFF in REDCap is NA", variable = "off_updrs_3_total",
            error.file)
 
   logError(redcap.data, is.na(redcap.data$closest_updrs_new_3_total_m1),
            "closest UPDRS ON is NA", variable = "closest_updrs_new_3_total_m1",
            error.file)
 
-  logError(redcap.data, is.na(redcap.data$closest_updrs_new_3_total_m2),
-           "closest UPDRS OFF is NA", variable = "closest_updrs_new_3_total_m2",
-            error.file)
+  logError(redcap.data,
+           is.na(redcap.data$closest_updrs_new_3_total_m2) & redcap.data$group == "pd",
+           "patient closest UPDRS OFF is NA",
+           variable = "closest_updrs_new_3_total_m2", error.file)
 
   on.mismatches <- !sapply(redcap.data$on_updrs_3_total ==
-                            redcap.data$closest_updrs_new_3_total_m1,
-                            isTRUE)
+                             redcap.data$closest_updrs_new_3_total_m1,
+                           isTRUE)
 
   logError(redcap.data, on.mismatches,
            paste0("UPDRS ON mismatch:", redcap.data$on_updrs_3_total, "/",
@@ -87,8 +90,8 @@ udallCrosscheckEntries <- function(redcap.data, error.file)
            error.file)
 
   off.mismatches <- !sapply(redcap.data$off_updrs_3_total ==
-                        redcap.data$closest_updrs_new_3_total_m2,
-                        isTRUE)
+                              redcap.data$closest_updrs_new_3_total_m2,
+                            isTRUE)
 
   logError(redcap.data, off.mismatches,
            paste0("UPDRS OFF mismatch:", redcap.data$off_updrs_3_total, "/",
