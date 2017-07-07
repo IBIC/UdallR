@@ -36,6 +36,7 @@ udallCleanREDCapDataWide <- function(dat, visit = 1) {
   on <- subset(dat, redcap_event_name == paste0("on_", arm))
   off <- subset(dat, redcap_event_name == paste0("off_", arm))
   beh <- subset(dat, redcap_event_name == paste0("behavioral_", arm))
+  genetic <- subset(dat, redcap_event_name == "genetic_data_arm_5")
 
   # Analyze column is the same either way
   analyze <- subset(dat, redcap_event_name == "analyze_arm_4")
@@ -76,10 +77,13 @@ udallCleanREDCapDataWide <- function(dat, visit = 1) {
                 "ant_orienting_correct", "ant_conflict_correct",
                 "ant_conflict_all")
 
+  genetic.colnames <-c("idnum", "apoe", "apoe4", "gbastatus", "gba", "genetic_data_complete")
+
 
   behcolnames <- c("idnum", axcpt.cols, ant.cols)
 
   beh <- beh[, behcolnames]
+  genetic <- genetic[,genetic.colnames]
   # rename columns for off and on conditions
   colnames(off) <- paste0("off_", colnames(off))
   colnames(on) <- paste0("on_", colnames(on))
@@ -97,9 +101,15 @@ udallCleanREDCapDataWide <- function(dat, visit = 1) {
   # merge these data frames together from idnum
   merged <- merge(on, off, by = "idnum", all.x = TRUE, all.y = TRUE)
   # merge in the behavioral data
+<<<<<<< HEAD
   merged <- merge(merged, beh, by = "idnum", all.x = TRUE)
 
   new.columns <- colnames(closest.visit)[!(colnames(closest.visit) %in% colnames(merged))]
+=======
+  merged <- merge(merged, beh, by = "idnum", all.x = TRUE, all.y = TRUE)
+  #merge in the genetic data
+  merged <- merge(merged, genetic, by = "idnum", all.x = TRUE, all.y = TRUE)
+>>>>>>> 1017723b728fa3c4262a7b520c8712ad45e39102
 
   cv2merge <- closest.visit[, c("idnum", new.columns)]
 
