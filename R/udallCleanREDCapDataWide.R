@@ -40,6 +40,8 @@ udallCleanREDCapDataWide <- function(dat, visit = 1) {
 
   # Analyze column is the same either way
   analyze <- subset(dat, redcap_event_name == "analyze_arm_4")
+  analyze <- analyze[, c("idnum", "analyze_visit_1", "analyze_visit_2")]
+  analyze[, 2:3] <- apply(analyze[, 2:3], 2, as.logical)
 
   # Arm 3, which has the closests visit that has been reuploaded to REDCap
   closest.visit <- subset(dat, redcap_event_name == "visit_for_mri_1_arm_3")
@@ -59,11 +61,7 @@ udallCleanREDCapDataWide <- function(dat, visit = 1) {
   blank[is.na(blank)] <- TRUE
   on <- on[,blank]
 
-  # closest.visit <- closest.visit[,colSums(is.na(closest.visit)) < nrow(closest.visit)]
-  # blank <- colSums(closest.visit=="") <= nrow(closest.visit)
-  # blank[is.na(blank)] <- TRUE
-  # closest.visit <- closest.visit[,blank]
-
+  # Select a subset of columns for behavior and genetic
   axcpt.cols <- c("off_axcpt_correctdetection",
                   "off_axcpt_falsealarm", "off_axcpt_correctnontarget",
                   "off_axcpt_rawdiff", "off_axcpt_dprime", "off_axcpt_rtcd",
@@ -77,19 +75,33 @@ udallCleanREDCapDataWide <- function(dat, visit = 1) {
                 "ant_orienting_correct", "ant_conflict_correct",
                 "ant_conflict_all")
 
-  genetic.colnames <-c("idnum", "apoe", "apoe4", "gbastatus", "gba", "genetic_data_complete")
+  genetic.colnames <- c("idnum", "apoe", "apoe4", "gbastatus", "gba",
+                       "genetic_data_complete")
 
+  # There are so many closest column names, load them from file.
+  data("Codebook_PaNUC_2017_07_07")
+  closest.colnames <- as.character(Codebook_PaNUC_2017_07_07$Stata_Variable_Name)
+  closest.colnames <- tolower(closest.colnames)
+  closest.colnames <- closest.colnames[closest.colnames != ""]
+  closest.colnames <- c("idnum",
+                        closest.colnames[closest.colnames %in% colnames(dat)])
 
   behcolnames <- c("idnum", axcpt.cols, ant.cols)
 
   beh <- beh[, behcolnames]
-  genetic <- genetic[,genetic.colnames]
+  genetic <- genetic[, genetic.colnames]
+  closest.visit <- closest.visit[, closest.colnames]
+
   # rename columns for off and on conditions
   colnames(off) <- paste0("off_", colnames(off))
   colnames(on) <- paste0("on_", colnames(on))
+
   # fix double on and double off and idnum variables
   colnames(on) <- gsub("on_on", "on", colnames(on))
   colnames(off) <- gsub("off_off", "off", colnames(off))
+
+
+
 
   # fix freesurfer names
   on <- renameFreeSurfer(on)
@@ -100,27 +112,16 @@ udallCleanREDCapDataWide <- function(dat, visit = 1) {
 
   # merge these data frames together from idnum
   merged <- merge(on, off, by = "idnum", all.x = TRUE, all.y = TRUE)
-  # merge in the behavioral data
-<<<<<<< HEAD
-  merged <- merge(merged, beh, by = "idnum", all.x = TRUE)
 
-  new.columns <- colnames(closest.visit)[!(colnames(closest.visit) %in% colnames(merged))]
-=======
+  # merge in the behavioral data
   merged <- merge(merged, beh, by = "idnum", all.x = TRUE, all.y = TRUE)
+
   #merge in the genetic data
   merged <- merge(merged, genetic, by = "idnum", all.x = TRUE, all.y = TRUE)
->>>>>>> 1017723b728fa3c4262a7b520c8712ad45e39102
 
-  cv2merge <- closest.visit[, c("idnum", new.columns)]
+  merged <- merge(merged, analyze, by = "idnum", all.x = TRUE, all.y = TRUE)
 
-  merged <- merge(merged, cv2merge, by = "idnum")
-
-  # Add information about whether to analyze a subject
-  analyze.df <- analyze[, c("idnum", "analyze_visit_1", "analyze_visit_2")]
-
-  analyze.df[, 2:3] <- apply(analyze.df[, 2:3], 2, as.logical)
-
-  merged <- merge(merged, analyze.df, by = "idnum", all.x = TRUE, all.y = TRUE)
+  merged <- merge(merged, closest.visit, by = "idnum")
 
   # We will create a couple of useful variables here
   # Create sex variable
