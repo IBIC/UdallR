@@ -78,9 +78,10 @@ udallCleanREDCapDataWide <- function(dat, visit = 1) {
   genetic.colnames <- c("idnum", "apoe", "apoe4", "gbastatus", "gba",
                        "genetic_data_complete")
 
-  # There are so many closest column names, load them from file.
-  data("Codebook_PaNUC_2017_07_07")
-  closest.colnames <- as.character(Codebook_PaNUC_2017_07_07$Stata_Variable_Name)
+  # # There are so many closest column names, load them from file.
+  # data("Codebook_PaNUC_2017_07_07")
+  # closest.colnames <- as.character(Codebook_PaNUC_2017_07_07$Stata_Variable_Name)
+
   closest.colnames <- tolower(closest.colnames)
   closest.colnames <- closest.colnames[closest.colnames != ""]
   closest.colnames <- c("idnum",
@@ -161,6 +162,7 @@ udallCleanREDCapDataWide <- function(dat, visit = 1) {
   # score SAI
   merged <- scoreSAI(merged)
 
+
   # TODO:
   ### 1 ) ADD NEW CLEANING ITEMS TO data/test.csv
 
@@ -174,6 +176,12 @@ udallCleanREDCapDataWide <- function(dat, visit = 1) {
     merged <- merged[merged$analyze_visit_2 & !is.na(merged$analyze_visit_2), ]
   }
 
+  # Replace error codes ([-800, -900]) with NAs
+  for (c in 1:ncol(merged))
+  {
+    if (is.numeric(merged[, c]))
+      merged[, c]  <- ifelse(merged[, c] < -799, NA, merged[, c])
+  }
 
   return(merged)
 }
