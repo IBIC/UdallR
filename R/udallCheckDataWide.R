@@ -80,14 +80,15 @@ udallCheckDataWide <- function(dat, error.file) {
                                          on_updrs_3_colnames])
     on_updrs_3_pd <- data.frame(dat[dat$group == "pd", on_updrs_3_colnames])
 
-    off_updrs_3_control <- data.frame(dat[dat$group == "control",
-                                          off_updrs_3_colnames])
+    # Controls don't do a UPDRS OFF
+    # off_updrs_3_control <- data.frame(dat[dat$group == "control",
+    #                                       off_updrs_3_colnames])
     off_updrs_3_pd <- data.frame(dat[dat$group == "pd", off_updrs_3_colnames])
 
     # check ranges between 0 and 4
     checkNumericRange(on_updrs_3_control, 0, 4)
     checkNumericRange(on_updrs_3_pd, 0, 4)
-    checkNumericRange(off_updrs_3_control, 0, 4)
+    # checkNumericRange(off_updrs_3_control, 0, 4)
     checkNumericRange(off_updrs_3_pd, 0, 4)
 
     # extract column names of hoehn and yahr scoring items and idnumbers for both on and off conditions
@@ -95,15 +96,19 @@ udallCheckDataWide <- function(dat, error.file) {
     off_updrs_3_hoehn_yahr_column_names <- c("idnum", "off_updrs_3_hoehn_yahr")
 
     # create data frames for both pd and control groups and off/on conditions
-    on_updrs_3_hoehn_yahr_control <- data.frame(dat[dat$group == "control", on_updrs_3_hoehn_yahr_column_names])
-    on_updrs_3_hoehn_yahr_pd <- data.frame(dat[dat$group == "pd", on_updrs_3_hoehn_yahr_column_names])
-    off_updrs_3_hoehn_yahr_control <- data.frame(dat[dat$group == "control", off_updrs_3_hoehn_yahr_column_names])
-    off_updrs_3_hoehn_yahr_pd <- data.frame(dat[dat$group == "pd", off_updrs_3_hoehn_yahr_column_names])
+    on_updrs_3_hoehn_yahr_control <- data.frame(dat[dat$group == "control",
+                                                    on_updrs_3_hoehn_yahr_column_names])
+    on_updrs_3_hoehn_yahr_pd <- data.frame(dat[dat$group == "pd",
+                                               on_updrs_3_hoehn_yahr_column_names])
+    # off_updrs_3_hoehn_yahr_control <- data.frame(dat[dat$group == "control",
+    #                                                   off_updrs_3_hoehn_yahr_column_names])
+    off_updrs_3_hoehn_yahr_pd <- data.frame(dat[dat$group == "pd",
+                                                off_updrs_3_hoehn_yahr_column_names])
 
     # check ranges between 0 and 5
     checkNumericRange(on_updrs_3_hoehn_yahr_control, 0, 5)
     checkNumericRange(on_updrs_3_hoehn_yahr_pd, 0, 5)
-    checkNumericRange(off_updrs_3_hoehn_yahr_control, 0, 5)
+    # checkNumericRange(off_updrs_3_hoehn_yahr_control, 0, 5)
     checkNumericRange(off_updrs_3_hoehn_yahr_pd, 0, 5)
 
     # extract column names of both off and on updrs 4 scoring items
@@ -113,19 +118,21 @@ udallCheckDataWide <- function(dat, error.file) {
     off_updrs_4_colnames <- c("off_updrs_4_1", "off_updrs_4_2", "off_updrs_4_3",
                               "off_updrs_4_4", "off_updrs_4_5", "off_updrs_4_6")
 
+    # UPDRS 4 was added around the end of 2016; not all subjects will have it.
+
     # create data frames for both control and pd and off/on conditions
     on_updrs_4_control <- data.frame(dat[dat$group == "control",
                                          on_updrs_4_colnames])
     on_updrs_4_pd <- data.frame(dat[dat$group == "pd", on_updrs_4_colnames ])
 
-    off_updrs_4_control <- data.frame(dat[dat$group == "control",
-                                          off_updrs_4_colnames])
+    # off_updrs_4_control <- data.frame(dat[dat$group == "control",
+    #                                       off_updrs_4_colnames])
     off_updrs_4_pd <- data.frame(dat[dat$group == "pd", off_updrs_4_colnames])
 
     # check ranges between 0 and 4
     checkNumericRange(on_updrs_4_control, 0, 4)
     checkNumericRange(on_updrs_4_pd, 0, 4)
-    checkNumericRange(off_updrs_4_control, 0, 4)
+    # checkNumericRange(off_updrs_4_control, 0, 4)
     checkNumericRange(off_updrs_4_pd, 0, 4)
 
 

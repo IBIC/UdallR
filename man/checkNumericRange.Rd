@@ -2,7 +2,7 @@
 % Please edit documentation in R/checkNumericRange.R
 \name{checkNumericRange}
 \alias{checkNumericRange}
-\title{Compares each value in passed data.frame to specified minimum and maximum values. 
+\title{Compares each value in passed data.frame to specified minimum and maximum values.
 Subject IDs and associated column names are printed out for values that are not
 within specified range.}
 \usage{
@@ -16,7 +16,7 @@ checkNumericRange(dat_cols, min, max)
 \item{max}{maximum value in range}
 }
 \description{
-Compares each value in passed data.frame to specified minimum and maximum values. 
+Compares each value in passed data.frame to specified minimum and maximum values.
 Subject IDs and associated column names are printed out for values that are not
 within specified range.
 }
