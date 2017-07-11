@@ -16,7 +16,6 @@ checkNumericRange <- function(dat_cols, min, max) {
   # test how many columns are numeric
   col_numeric <- sum(apply(dat_cols, 2, is.numeric))
 
-
   # warning if not all columns are numeric
   warningIfNot(col_total == col_numeric, "All columns must be numeric.")
 

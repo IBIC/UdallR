@@ -30,6 +30,7 @@ udallCleanREDCapDataWide <- function(dat, visit = 1) {
   newnames <- gsub("^data.", "", names)
   colnames(dat) <- newnames
 
+
   # Select the on/off/behavioral columns depending on which visit.
   arm <- paste0("arm_", visit)
 
@@ -52,14 +53,14 @@ udallCleanREDCapDataWide <- function(dat, visit = 1) {
 
   # remove missing or empty columns from data frames
   off <- off[, colSums(is.na(off)) < nrow(off)]
-  blank <- colSums(off == "") <= nrow(off)
-  blank[is.na(blank)] <- TRUE
-  off <- off[,blank]
+  # blank <- colSums(off == "") == nrow(off)
+  # blank[is.na(blank)] <- TRUE
+  # off <- off[, !blank]
 
-  on <- on[,colSums(is.na(on)) < nrow(on)]
-  blank <- colSums(on=="") <= nrow(on)
-  blank[is.na(blank)] <- TRUE
-  on <- on[,blank]
+  on <- on[, colSums(is.na(on)) < nrow(on)]
+  # blank <- colSums(on == "") == nrow(on)
+  # blank[is.na(blank)] <- FALSE
+  # on <- on[, !blank]
 
   # Select a subset of columns for behavior and genetic
   axcpt.cols <- c("off_axcpt_correctdetection",
@@ -83,7 +84,7 @@ udallCleanREDCapDataWide <- function(dat, visit = 1) {
   # closest.colnames <- as.character(Codebook_PaNUC_2017_07_07$Stata_Variable_Name)
 
 
-  closest.colnames <- tolower(colnames(multivs.test))
+  closest.colnames <- tolower(colnames(panuc_multivis_2017_07_07))
   closest.colnames <- closest.colnames[closest.colnames != ""]
   closest.colnames <- c("idnum",
                         closest.colnames[closest.colnames %in% colnames(dat)])
@@ -101,9 +102,6 @@ udallCleanREDCapDataWide <- function(dat, visit = 1) {
   # fix double on and double off and idnum variables
   colnames(on) <- gsub("on_on", "on", colnames(on))
   colnames(off) <- gsub("off_off", "off", colnames(off))
-
-
-
 
   # fix freesurfer names
   on <- renameFreeSurfer(on)
@@ -124,6 +122,8 @@ udallCleanREDCapDataWide <- function(dat, visit = 1) {
   merged <- merge(merged, analyze, by = "idnum", all.x = TRUE, all.y = TRUE)
 
   merged <- merge(merged, closest.visit, by = "idnum")
+
+  merged <- merged[, !grepl("on_off", colnames(merged))]
 
   # We will create a couple of useful variables here
   # Create sex variable
