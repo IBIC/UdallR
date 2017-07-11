@@ -22,12 +22,10 @@ numericColumnsUPDRS <- function(dat) {
                       "off_updrs_3_11", "off_updrs_3_12", "off_updrs_3_13", "off_updrs_3_14", "off_updrs_3_15_r",
                       "off_updrs_3_15_l", "off_updrs_3_16_r", "off_updrs_3_16_l", "off_updrs_3_17_rue",
                       "off_updrs_3_17_lue", "off_updrs_3_17_rle", "off_updrs_3_17_lle", "off_updrs_3_17_lipjaw",
-                      "off_updrs_3_18", "off_updrs_3_hoehn_yahr")
-
-                      # , "on_updrs_4_1",
-                      # "on_updrs_4_2", "on_updrs_4_3", "on_updrs_4_4", "on_updrs_4_5",
-                      # "on_updrs_4_6", "off_updrs_4_1", "off_updrs_4_2", "off_updrs_4_3", "off_updrs_4_4", "off_updrs_4_5",
-                      # "off_updrs_4_6")
+                      "off_updrs_3_18", "off_updrs_3_hoehn_yahr", "on_updrs_4_1",
+                      "on_updrs_4_2", "on_updrs_4_3", "on_updrs_4_4", "on_updrs_4_5",
+                      "on_updrs_4_6", "off_updrs_4_1", "off_updrs_4_2", "off_updrs_4_3", "off_updrs_4_4", "off_updrs_4_5",
+                      "off_updrs_4_6")
 
   # change to columns to numeric
   dat[updrs_colnames] <- lapply(dat[updrs_colnames], as.numeric)

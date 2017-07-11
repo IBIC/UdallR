@@ -25,12 +25,12 @@ scoreUPDRS <- function(dat) {
                                      na.rm=TRUE)
 
   # create vector of on UPDRS IV items to be scored
-  # on_updrs_4_colnames <- c("on_updrs_4_1", "on_updrs_4_2", "on_updrs_4_3", "on_updrs_4_4", "on_updrs_4_5",
-  #                       "on_updrs_4_6")
+  on_updrs_4_colnames <- c("on_updrs_4_1", "on_updrs_4_2", "on_updrs_4_3",
+                           "on_updrs_4_4", "on_updrs_4_5", "on_updrs_4_6")
 
   # calculate total score of on UPDRS IV; append to end of data frame
-  # dat[, "on_updrs_4_total"] <- apply(dat[,on_updrs_4_colnames], 1 , sum,
-  #                                    na.rm=TRUE)
+  dat[, "on_updrs_4_total"] <- apply(dat[,on_updrs_4_colnames], 1 , sum,
+                                    na.rm=TRUE)
 
   #### off UPDRS Part III
   # create vector of UPDRS III items to be scored
@@ -48,11 +48,12 @@ scoreUPDRS <- function(dat) {
   dat[, "off_updrs_3_total"] <- apply(dat[,off_updrs_3_colnames],1,sum,na.rm=TRUE)
 
   # create vector of off UPDRS IV items to be scored
-  # off_updrs_4_colnames <- c("off_updrs_4_1", "off_updrs_4_2", "off_updrs_4_3", "off_updrs_4_4", "off_updrs_4_5",
-  #                           "off_updrs_4_6")
-  #
-  # # calculate total score of off UPDRS IV; append to end of data frame
-  # dat[, "off_updrs_4_total"] <- apply(dat[,off_updrs_4_colnames],1,sum,na.rm=TRUE)
+  off_updrs_4_colnames <- c("off_updrs_4_1", "off_updrs_4_2", "off_updrs_4_3",
+                            "off_updrs_4_4", "off_updrs_4_5", "off_updrs_4_6")
+
+  # calculate total score of off UPDRS IV; append to end of data frame
+  dat[, "off_updrs_4_total"] <- apply(dat[,off_updrs_4_colnames], 1, sum,
+                                      na.rm=TRUE)
 
   # return modified data.frame
   return(dat)
