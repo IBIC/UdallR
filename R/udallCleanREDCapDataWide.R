@@ -62,14 +62,19 @@ udallCleanREDCapDataWide <- function(dat, visit = 1) {
   # blank[is.na(blank)] <- FALSE
   # on <- on[, !blank]
 
-  # Select a subset of columns for behavior and genetic
-  axcpt.cols <- c("off_axcpt_correctdetection",
-                  "off_axcpt_falsealarm", "off_axcpt_correctnontarget",
-                  "off_axcpt_rawdiff", "off_axcpt_dprime", "off_axcpt_rtcd",
-                  "off_axcpt_rtcntd", "on_axcpt_correctdetection",
-                  "on_axcpt_falsealarm", "on_axcpt_correctnontarget",
-                  "on_axcpt_rawdiff","on_axcpt_dprime", "on_axcpt_rtcd",
-                  "on_axcpt_rtcntd")
+  # Select a subset of columns for behavior and genetic axcpt.cols <-
+axcpt.cols <- c("on_axcpt_correctdetection", "on_axcpt_falsealarm"
+               ,"on_axcpt_correctnontarget" ,"on_axcpt_rawdiff", "on_axcpt_dprime"
+               ,"on_axcpt_rtcd" ,"on_axcpt_rtcntd" ,"on_ax_rawcorrect",
+                "on_bx_rawcorrect" ,"on_by_rawcorrect" ,"on_ay_rawcorrect",
+                "on_ax_percent" ,"on_bx_percent" ,"on_by_percent" ,"on_ay_percent",
+                "on_ax_rt" ,"on_bx_rt" ,"on_by_rt" ,"on_ay_rt" ,"on_ax_sd","on_bx_sd", "on_by_sd" ,"on_ay_sd",
+                "off_axcpt_correctdetection",
+                "off_axcpt_falsealarm" ,"off_axcpt_correctnontarget","off_axcpt_rawdiff", "off_axcpt_dprime" ,"off_axcpt_rtcd"
+               ,"off_axcpt_rtcntd" ,"off_ax_rawcorrect", "off_bx_rawcorrect","off_by_rawcorrect" ,"off_ay_rawcorrect", "off_ax_percent","off_bx_percent" ,"off_by_percent" ,"off_ay_percent", "off_ax_rt"
+               ,"off_bx_rt" ,"off_by_rt" ,"off_ay_rt" ,"off_ax_sd" ,"off_bx_sd",
+                "off_by_sd" ,"off_ay_sd")
+
 
   ant.cols <- c("ant_acc", "ant_rt", "ant_alerting_all",
                 "ant_alerting_correct", "ant_orienting_all",
@@ -111,17 +116,28 @@ udallCleanREDCapDataWide <- function(dat, visit = 1) {
   names(off)[names(off)=="off_idnum"]  <- "idnum"
 
   # merge these data frames together from idnum
+                                        # Note that there will be a problem if we "grow" the number of records by merging additional arms -
+                                        # that would mean that there is behavioral or analysis records for subjects that we haven't entered.
+    # This is a crude check on that! If you get this kind of problem, go back to the database and figure out what records you've added incorrectly.
   merged <- merge(on, off, by = "idnum", all.x = TRUE, all.y = TRUE)
 
+  n <- dim(merged)[1]
+    
   # merge in the behavioral data
   merged <- merge(merged, beh, by = "idnum", all.x = TRUE, all.y = TRUE)
+  stopifnot(n == dim(merged)[1])
 
   #merge in the genetic data
   merged <- merge(merged, genetic, by = "idnum", all.x = TRUE, all.y = TRUE)
+  stopifnot(n == dim(merged)[1])
 
+  # merge in the analysis flag
   merged <- merge(merged, analyze, by = "idnum", all.x = TRUE, all.y = TRUE)
+  stopifnot(n == dim(merged)[1])
 
-  merged <- merge(merged, closest.visit, by = "idnum")
+  # merge in clinical core visit
+  merged <- merge(merged, closest.visit, by = "idnum", all.x=TRUE,all.y=TRUE)
+  stopifnot(n == dim(merged)[1])
 
   merged <- merged[, !grepl("on_off", colnames(merged))]
 
@@ -167,22 +183,28 @@ udallCleanREDCapDataWide <- function(dat, visit = 1) {
   # TODO:
   ### 1 ) ADD NEW CLEANING ITEMS TO data/test.csv
 
-  # cross with !is.na so no NAs are introduced.
+# Identify subjects who should be included in the study only
+# If there are NAs present let us count them as true - perhaps missing data means they have not yet been evaluated.
   if (visit == 1)
   {
-    merged <- merged[merged$analyze_visit_1 & !is.na(merged$analyze_visit_1), ]
+    merged$analyze_visit_1[is.na(merged$analyze_visit_1)] <- TRUE
+    merged <- merged[merged$analyze_visit_1 ==TRUE,]
   }
   else if (visit == 2)
   {
-    merged <- merged[merged$analyze_visit_2 & !is.na(merged$analyze_visit_2), ]
+    merged$analyze_visit_2[is.na(merged$analyze_visit_2)] <- TRUE
+    merged <- merged[merged$analyze_visit_2 ==TRUE,]
   }
 
-  # Replace error codes ([-800, -900]) with NAs
-  for (c in 1:ncol(merged))
-  {
-    if (is.numeric(merged[, c]))
-      merged[, c]  <- ifelse(merged[, c] < -799, NA, merged[, c])
-  }
+# This is dangerous - do not assume blanket error codes. Use udallReplaceMissing function
+# Replace error codes ([-800, -900]) with NAs
+  
+#  for (c in 1:ncol(merged))
+#  {
+#    if (is.numeric(merged[, c]))
+#      merged[, c]  <- ifelse(merged[, c] < -799, NA, merged[, c])
+                                        #  }
+  merged <- udallReplaceMissing(merged)
 
   return(merged)
 }

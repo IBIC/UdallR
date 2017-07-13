@@ -5,7 +5,7 @@
 
 # return modified dataframe of dataframe passed in with calcuated totals of updrs items
 scoreUPDRS <- function(dat) {
-  # replace missing data codes with NA values
+  # replace missing data codes with NA values - but see below where we handle missing data coded as pull downs for updrs part 3
   dat <- udallReplaceMissing(dat)
 
   #### On UPDRS Part III
@@ -20,9 +20,14 @@ scoreUPDRS <- function(dat) {
                            "on_updrs_3_17_lue", "on_updrs_3_17_rle", "on_updrs_3_17_lle", "on_updrs_3_17_lipjaw",
                            "on_updrs_3_18")
 
+  # remove missing data - in these values, numbers greater than 4 are missing data codes; set them to NA
+    sub <- dat[,on_updrs_3_colnames] 
+    sub[sub > 4] <- NA
+
   # calculate total score of on UPDRS III; append to end of data frame
-  dat[, "on_updrs_3_total"] <- apply(dat[,on_updrs_3_colnames], 1, sum,
+  dat[, "on_updrs_3_total"] <- apply(sub[,on_updrs_3_colnames], 1, sum,
                                      na.rm=TRUE)
+
 
   # create vector of on UPDRS IV items to be scored
   on_updrs_4_colnames <- c("on_updrs_4_1", "on_updrs_4_2", "on_updrs_4_3",
@@ -44,8 +49,12 @@ scoreUPDRS <- function(dat) {
                             "off_updrs_3_17_lue", "off_updrs_3_17_rle", "off_updrs_3_17_lle", "off_updrs_3_17_lipjaw",
                             "off_updrs_3_18")
 
+  # remove missing data - in these values, numbers greater than 4 are missing data codes; set them to NA
+    sub <- dat[,off_updrs_3_colnames] 
+    sub[sub > 4] <- NA
+
   # calculate total score of off UPDRS III; append to end of data frame
-  dat[, "off_updrs_3_total"] <- apply(dat[,off_updrs_3_colnames],1,sum,na.rm=TRUE)
+  dat[, "off_updrs_3_total"] <- apply(sub[,off_updrs_3_colnames],1,sum,na.rm=TRUE)
 
   # create vector of off UPDRS IV items to be scored
   off_updrs_4_colnames <- c("off_updrs_4_1", "off_updrs_4_2", "off_updrs_4_3",
