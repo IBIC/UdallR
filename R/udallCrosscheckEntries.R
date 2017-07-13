@@ -1,7 +1,17 @@
-
+#'
+#' Crosscheck entries
+#'
+#' Crosschecks the double-uploaded data and between the REDCap data and the
+#' MS Access/Analytic Core/mulitvis data.
+#'
+#' @param cdat Cleaned data frame (producet of udallCleanDataWide)
+#' @param error.file File to save all errors to.
+#'
+#' @examples udallCrosscheckEntries(cdat, "mismatch-errors.txt")
+#'
 #' @export
 
-udallCrosscheckEntries <- function(redcap.data, error.file)
+udallCrosscheckEntries <- function(cdat, error.file)
 {
   g <- "group"
   ps <- "parkinsonism_status"
@@ -16,7 +26,7 @@ udallCrosscheckEntries <- function(redcap.data, error.file)
               sep = "\t"),
         file = error.file)
 
-  comparison <- redcap.data[, c("idnum", g, ps)]
+  comparison <- cdat[, c("idnum", g, ps)]
 
   for (r in 1:nrow(comparison))
   {
@@ -44,58 +54,58 @@ udallCrosscheckEntries <- function(redcap.data, error.file)
   }
 
   # Age difference
-  diffs <- redcap.data$scage - redcap.data$agevisit
+  diffs <- cdat$scage - cdat$agevisit
   diffs.days <- diffs * 365
 
-  logError(redcap.data, diffs.days > 90,
+  logError(cdat, diffs.days > 90,
            problem = paste0("wide visit gap: ", round(diffs.days), " days"),
            variable = "scage,agevisit", warning = TRUE, error.file)
 
   # Compare double-entered UPDRS data
 
-  if (sum(is.na(c(redcap.data$on_updrs_3_total,
-                  redcap.data$off_updrs_3_total,
-                  redcap.data$updrs_new_3_total_m1,
-                  redcap.data$updrs_new_3_total_m2))) > 0)
+  if (sum(is.na(c(cdat$on_updrs_3_total,
+                  cdat$off_updrs_3_total,
+                  cdat$updrs_new_3_total_m1,
+                  cdat$updrs_new_3_total_m2))) > 0)
     warning(paste("NAs in one or more UPDRS total column.",
                   "This will cause other errors. Resolve these first."))
 
 
-  logError(redcap.data, is.na(redcap.data$on_updrs_3_total),
+  logError(cdat, is.na(cdat$on_updrs_3_total),
            "UPDRS ON in REDCap is NA", variable = "on_updrs_3_total",
            error.file)
 
-  logError(redcap.data,
-           is.na(redcap.data$off_updrs_3_total) & redcap.data$group == "pd",
+  logError(cdat,
+           is.na(cdat$off_updrs_3_total) & cdat$group == "pd",
            "patient UPDRS OFF in REDCap is NA", variable = "off_updrs_3_total",
            error.file)
 
-  logError(redcap.data, is.na(redcap.data$updrs_new_3_total_m1),
+  logError(cdat, is.na(cdat$updrs_new_3_total_m1),
            "closest UPDRS ON is NA", variable = "updrs_new_3_total_m1",
            error.file)
 
-  logError(redcap.data,
-           is.na(redcap.data$updrs_new_3_total_m2) & redcap.data$group == "pd",
+  logError(cdat,
+           is.na(cdat$updrs_new_3_total_m2) & cdat$group == "pd",
            "patient closest UPDRS OFF is NA",
            variable = "updrs_new_3_total_m2", error.file)
 
-  on.mismatches <- !sapply(redcap.data$on_updrs_3_total ==
-                             redcap.data$updrs_new_3_total_m1,
+  on.mismatches <- !sapply(cdat$on_updrs_3_total ==
+                             cdat$updrs_new_3_total_m1,
                            isTRUE)
 
-  logError(redcap.data, on.mismatches,
-           paste0("UPDRS ON mismatch:", redcap.data$on_updrs_3_total, "/",
-                  redcap.data$updrs_new_3_total_m1),
+  logError(cdat, on.mismatches,
+           paste0("UPDRS ON mismatch:", cdat$on_updrs_3_total, "/",
+                  cdat$updrs_new_3_total_m1),
            variable = "on_updrs_3_total,updrs_new_3_total_m1",
            error.file)
 
-  off.mismatches <- !sapply(redcap.data$off_updrs_3_total ==
-                              redcap.data$updrs_new_3_total_m2,
+  off.mismatches <- !sapply(cdat$off_updrs_3_total ==
+                              cdat$updrs_new_3_total_m2,
                             isTRUE)
 
-  logError(redcap.data, off.mismatches,
-           paste0("UPDRS OFF mismatch:", redcap.data$off_updrs_3_total, "/",
-                  redcap.data$updrs_new_3_total_m2),
+  logError(cdat, off.mismatches,
+           paste0("UPDRS OFF mismatch:", cdat$off_updrs_3_total, "/",
+                  cdat$updrs_new_3_total_m2),
            variable = "off_updrs_3_total,updrs_new_3_total_m2",
            error.file)
 }
