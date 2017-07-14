@@ -26,7 +26,7 @@
 #' @export
 
 logError <- function(dat, column, problem, variable,
-                     save.file, warning = FALSE, id.column = "idnum")
+                     save.file = NA, warning = FALSE, id.column = "idnum")
 {
   # Make sure the colunn fits in dat
   if (length(column) != nrow(dat))
@@ -43,11 +43,16 @@ logError <- function(dat, column, problem, variable,
   warning.text <- ifelse(warning, "WARNING", "ERROR")
   problem <- paste(warning.text, problem, variable, sep = "\t")
 
-  if (length(bad.ids) > 0 & !is.na(save.file))
+  if (length(bad.ids) > 0 )
   {
-    out <- as.data.frame(cbind(bad.ids, problem))
+    if (!is.na(save.file))
+    {
+      out <- as.data.frame(cbind(bad.ids, problem))
 
-    write.table(out, file = save.file, append = TRUE, sep = "\t",
-                quote = FALSE, row.names = FALSE, col.names = FALSE)
+      write.table(out, file = save.file, append = TRUE, sep = "\t",
+                  quote = FALSE, row.names = FALSE, col.names = FALSE)
+    }
+    else
+      cat(paste(bad.ids, problem), fill = TRUE)
   }
 }

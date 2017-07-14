@@ -187,13 +187,27 @@ udallCleanREDCapDataWide <- function(dat, visit = 1) {
   # If there are NAs present let us count them as true - perhaps missing data means they have not yet been evaluated.
   if (visit == 1)
   {
+    if (sum(is.na(merged$analyze_visit_1)) > 0)
+    {
+      logError(merged, is.na(merged$analyze_visit_1),
+               "No visit 1 analyze entry. Including by default",
+               "analyze_visit_1", NA)
+    }
+
     merged$analyze_visit_1[is.na(merged$analyze_visit_1)] <- TRUE
-    merged <- merged[merged$analyze_visit_1 ==TRUE,]
+    merged <- merged[merged$analyze_visit_1 ==TRUE, ]
   }
   else if (visit == 2)
   {
+    if (sum(is.na(merged$analyze_visit_2)) > 0)
+    {
+      logError(merged, is.na(merged$analyze_visit_2),
+               "No visit 2 analyze entry. Including by default",
+               "analyze_visit_2", NA)
+    }
+
     merged$analyze_visit_2[is.na(merged$analyze_visit_2)] <- TRUE
-    merged <- merged[merged$analyze_visit_2 ==TRUE,]
+    merged <- merged[merged$analyze_visit_2 ==TRUE, ]
   }
 
   # This is dangerous - do not assume blanket error codes. Use udallReplaceMissing function

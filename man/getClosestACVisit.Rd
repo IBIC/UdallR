@@ -4,17 +4,21 @@
 \alias{getClosestACVisit}
 \title{Get the closest analytic site visits.}
 \usage{
-getClosestACVisit(dat, file.name = NULL, multivis.df = NULL,
-  multivis.file = NULL)
+getClosestACVisit(dat, multivis.df = NULL, multivis.file = NULL,
+  file.name = NULL)
 }
 \arguments{
 \item{dat}{Cleaned REDCap data}
 
+\item{multivis.file}{CSV file to read multivis information from, if you need
+data other than the default (currently 20174/04/25).}
+
 \item{file.name}{CSV file to save output to. Defaults to NULL. If none is
 given, returns data frame.}
 
-\item{multivis.file}{CSV file to read multivis information from, if you need
-data other than the default (currently 20174/04/25).}
+\item{mulitivis.df}{Data frame with multivis information (e.g. the
+lazy-loaded panuc_multivis_*_* datasets). Mutually exclusive with
+multivis.file}
 }
 \value{
 closest.visit A data table with the information from the analytic
@@ -26,6 +30,6 @@ output to, if wanted, and outputs a data frame containing the analytical
 core visit that was nearest to the scan date (preferably within 6 months).
 }
 \examples{
-getClosestACVisit(visit1, "visit1.txt")
+getClosestACVisit(visit1, multivis.df = panuc_multivis_07_07)
 
 }

@@ -4,7 +4,7 @@
 \alias{logError}
 \title{Log errors in data frame.}
 \usage{
-logError(dat, column, problem, variable, save.file, warning = FALSE,
+logError(dat, column, problem, variable, save.file = NA, warning = FALSE,
   id.column = "idnum")
 }
 \arguments{
