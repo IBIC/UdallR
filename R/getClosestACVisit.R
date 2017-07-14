@@ -7,18 +7,22 @@
 #' @param dat Cleaned REDCap data
 #' @param file.name CSV file to save output to. Defaults to NULL. If none is
 #' given, returns data frame.
+#' @param mulitivis.df Data frame with multivis information (e.g. the
+#' lazy-loaded panuc_multivis_*_* datasets). Mutually exclusive with
+#' multivis.file
 #' @param multivis.file CSV file to read multivis information from, if you need
 #' data other than the default (currently 20174/04/25).
+#'
 #' @return closest.visit A data table with the information from the analytic
 #' center visit nearest to scan date.
 #'
-#' @examples getClosestACVisit(visit1, "visit1.txt")
+#' @examples getClosestACVisit(visit1, multivis.df = panuc_multivis_07_07)
 #'
 #' @export
 #'
 
-getClosestACVisit <- function(dat, file.name = NULL, multivis.df = NULL,
-                              multivis.file = NULL)
+getClosestACVisit <- function(dat, multivis.df = NULL, multivis.file = NULL,
+                              file.name = NULL)
 {
 
   if (is.null(multivis.file) & is.null(multivis.df))
