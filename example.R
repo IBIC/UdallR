@@ -1,6 +1,8 @@
 # Load libraries required to download from REDCap and install custom packages.
 # This loop installs missing pacakges.
 
+setwd("~")
+
 for (package in c("REDCapR", "devtools"))
 {
   if (!require(package, character.only = TRUE))
@@ -12,12 +14,12 @@ for (package in c("REDCapR", "devtools"))
 
 # Install the custom UdallR library. You may have to change the path, depending
 ## on where you downloaded UdallR to.
-install("~/UdallR", quiet = TRUE)
+install("UdallR", quiet = TRUE)
 library(UdallR, quietly = TRUE,  warn.conflicts = FALSE)
 
 # It isn't secure to upload access tokens to GitHub, so store your access token
 ## in a file like this so R can read it.
-rc.token <- readChar("access-token.txt", nchars = 32)
+rc.token <- readChar("UdallR/access-token.txt", nchars = 32)
 
 # Read the data from the REDCap API. "stringsAsFactors" stops R from treating
 ## important strings as factors (which when written to file, are written as the

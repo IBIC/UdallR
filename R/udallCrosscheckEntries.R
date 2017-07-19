@@ -101,10 +101,10 @@ udallCrosscheckEntries <- function(cdat, error.file)
 
   off.mismatches <- !sapply(cdat$off_updrs_3_total ==
                               cdat$updrs_new_3_total_m2,
-                            isTRUE)
+                            isTRUE) & cdat$group == "pd"
 
   logError(cdat, off.mismatches,
-           paste0("UPDRS OFF mismatch:", cdat$off_updrs_3_total, "/",
+           paste0("patient UPDRS OFF mismatch:", cdat$off_updrs_3_total, "/",
                   cdat$updrs_new_3_total_m2),
            variable = "off_updrs_3_total,updrs_new_3_total_m2",
            error.file)

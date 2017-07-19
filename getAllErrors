@@ -1,0 +1,18 @@
+#!/bin/bash
+
+today=$(date +'%Y%m%d')
+out=all-errors-${today}.txt
+
+if [ -a ${out} ]
+then
+    echo "Overwriting old ${out}"
+    echo
+fi
+
+Rscript example.R
+
+cat *errors.txt | sort > ${out}
+sed -i '/^subject/d' ${out}
+
+echo -ne "\n$(grep -c ERROR $out) errors and "
+echo "$(grep -c WARNING $out) warnings found"
