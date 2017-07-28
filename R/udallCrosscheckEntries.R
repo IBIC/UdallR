@@ -107,5 +107,5 @@ udallCrosscheckEntries <- function(cdat, error.file)
            paste0("patient UPDRS OFF mismatch:", cdat$off_updrs_3_total, "/",
                   cdat$updrs_new_3_total_m2),
            variable = "off_updrs_3_total,updrs_new_3_total_m2",
-           error.file)
+  error.file)
 }

@@ -40,6 +40,23 @@ checked <- udallCheckDataWide(cdat, error.file = "REDCap-errors.txt")
 ## maintained by the Udall team.
 udallCrosscheckEntries(cdat, error.file = "mismatch-errors.txt")
 
+closest.visits <- getClosestACVisit(cdat,
+                                    multivis.df = panuc_multivis_2017_07_17)
+
+demographics <- c("agevisit", "education_years", "gender", "handedness")
+pd.symptoms <- c("hoehn_and_yahr_m0", "dx_dominant_side", "updrs_new_1_total",
+                 "updrs_new_2_total", "updrs_new_3_total", "updrs_new_4_total",
+                 "ageatonset")
+cog <- c("moca_score", "trails_b_seconds")
+
+closest.visits[closest.visits < 0] <- NA
+closest.visits$handedness <- as.factor(closest.visits$handedness)
+levels(closest.visits$handedness) <- c("right", "left", "mixed")
+
+closest.visits$dx_dominant_side <- as.factor(closest.visits$dx_dominant_side)
+
+udallDemographicTable(closest.visits, c(demographics, pd.symptoms, cog))
+
 # checked <- checked[, !grepl("redcap_event_name", colnames(checked))]
 # checked$redcap_event_name <- "visit_for_mri_1_arm_3"
 #

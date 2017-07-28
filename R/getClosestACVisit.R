@@ -50,6 +50,21 @@ getClosestACVisit <- function(dat, multivis.df = NULL, multivis.file = NULL,
                                          multivis = multivis.dat)))
   colnames(closest.visit) <- colnames(multivis.dat)
 
+  # df ends up factors by default, convert to character.
+  closest.visit <- data.frame(lapply(closest.visit, as.character),
+                              stringsAsFactors = FALSE)
+
+  # Convert appropriate columns to numeric.
+  for (col in 1:ncol(closest.visit))
+  {
+    # Check whether NAs are introduced by coercion to numeric
+    # suppressWarnings silences the expected "NA introduced by coercion" error
+    ## from "as.numeric"
+    if (identical(suppressWarnings(is.na(as.numeric(closest.visit[, col]))),
+                   is.na(closest.visit[, col])))
+         closest.visit[, col] <- as.numeric(closest.visit[, col])
+  }
+
   # If a value was passed to file.name, write out the csv, otherwise return it.
   if (!is.null(file.name))
       write.csv(closest.visit, file = file.name, row.names = FALSE,
