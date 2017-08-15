@@ -55,7 +55,9 @@ levels(closest.visits$handedness) <- c("right", "left", "mixed")
 
 closest.visits$dx_dominant_side <- as.factor(closest.visits$dx_dominant_side)
 
-udallDemographicTable(closest.visits, c(demographics, pd.symptoms, cog))
+udallDemographicTable(closest.visits, c(demographics, pd.symptoms, cog),
+                      group.by = "parkinsonism_status",
+                      group.ok = c("PD", "Unaffected"))
 
 # checked <- checked[, !grepl("redcap_event_name", colnames(checked))]
 # checked$redcap_event_name <- "visit_for_mri_1_arm_3"

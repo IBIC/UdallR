@@ -4,12 +4,17 @@
 \alias{udallDemographicTable}
 \title{Create a demographic table for Udall P2}
 \usage{
-udallDemographicTable(data, columns)
+udallDemographicTable(data, columns, group.by, group.ok = NULL)
 }
 \arguments{
 \item{data}{Data from which to select the columns.}
 
-\item{columns}{List of columns that exist in data.}
+\item{columns}{List of columns to summarize, all must exist in data.}
+
+\item{group.by}{Variable to group subjects by.}
+
+\item{group.ok}{List of groups to include in the sorting; defaults to all
+options in group.by if not given.}
 }
 \value{
 A data frame with the inputted columns on the left and seven columns:

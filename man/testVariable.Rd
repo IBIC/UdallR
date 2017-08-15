@@ -4,7 +4,7 @@
 \alias{testVariable}
 \title{Test demographic variable}
 \usage{
-testVariable(col, all.subjects)
+testVariable(col, all.subjects, grouping, groups)
 }
 \arguments{
 \item{col}{Column name}

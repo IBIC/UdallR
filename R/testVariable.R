@@ -12,80 +12,87 @@
 #'
 #' @export
 
-testVariable <- function(col, all.subjects){
+testVariable <- function(col, all.subjects, grouping, groups){
 
-  pd <- all.subjects[all.subjects$parkinsonism_status=="PD", ]
-  ctrl <- all.subjects[all.subjects$parkinsonism_status=="Unaffected", ]
-
-  pd.col <- pd[, col]
-  ctrl.col <- ctrl[, col]
-  total.col <- all.subjects[, col]
-
-  if (is.numeric(pd.col)) # Both vectors should be the same type
+  if (!(grouping %in% colnames(all.subjects)))
   {
-    if (all(is.na(ctrl.col)))
+    stop(paste("Column", grouping, "is not present in all.subjects"))
+  }
+
+  # Select data subsets based on groups
+  subsets <- as.list(rep(NA, length(groups)))
+  for (i in 1:length(groups))
+  {
+    subsets[[i]] <- all.subjects[all.subjects[, grouping]==groups[i], col]
+  }
+  names(subsets) <- groups
+
+  # Name output for assignment
+  return.vec <- rep(NA, length(subsets) * 2 + 3)
+  names(return.vec)[seq(1, length(return.vec) - 3, by = 2)] <- paste0(groups,
+                                                                      ".m")
+  names(return.vec)[seq(2, length(return.vec) - 3, by = 2)] <- paste0(groups,
+                                                                      ".sd")
+  names(return.vec)[length(return.vec):(length(return.vec) - 2)] <- c("total.sd",
+                                                                      "total.m",
+                                                                      "p")
+
+
+  # Only total subjets that belong to an eligible group
+  # Assign total information to total.*
+  total <- all.subjects[all.subjects[, grouping] %in% groups, c(grouping, col)]
+
+  total.omitted <- na.omit(total)
+  omitted.groups <- unique(total.omitted[, grouping])
+
+  if (length(omitted.groups) != length(groups))
+  {
+    warning("One or more groups was ommitted entirely from ANOVA.")
+  }
+
+  if (is.numeric(total[, col]))
+  {
+    return.vec["total.m"] <- mean(total[, col], na.rm = TRUE)
+    return.vec["total.sd"] <- sd(total[, col], na.rm = TRUE)
+
+    if (length(omitted.groups) > 1)
     {
-      warning(paste("Control col", col, "is all NA"))
-
-      ctrl.mean <- NA
-      ctrl.sd <- NA
-
-      p.val <- NA
+      message(paste("Running ANOVA for group differences:", col))
+      anova.results <- aov(total[, col] ~ total[, grouping])
+      return.vec["p"] <- summary(anova.results)[[1]][["Pr(>F)"]][[1]]
     }
     else
     {
-      ctrl.mean <- mean(ctrl.col, na.rm = TRUE)
-      ctrl.sd <- sd(ctrl.col, na.rm = TRUE)
-
-      p.val <- t.test(pd.col, ctrl.col)$p.value
+      warning(paste("Not enough groups to do an ANOVA for", col))
+      return.vec["p"] <- NA
     }
-
-    pd.mean <- mean(pd.col, na.rm = TRUE)
-    pd.sd <- sd(pd.col, na.rm = TRUE)
-
-    if (is.numeric(p.val) & p.val < 0.05)
-      warning(paste("p val is < .05 for col", col))
-
-    return.vec <- c(pd.mean, pd.sd, ctrl.mean, ctrl.sd, p.val,
-                    mean(total.col, na.rm = TRUE), sd(total.col, na.rm = TRUE))
   }
-  else if (is.factor(pd.col) | is.character(pd.col))
+
+  for (i in 1:length(subsets))
   {
-    if (length(levels(pd.col)) != 2)
+    s <- subsets[[i]]
+    name <- names(subsets)[i]
+
+    if (is.numeric(s))
     {
-      warnings("Error: More than two factor levels in column.")
+      if (all(is.na(s)))
+      {
+        warning("Column is all NA")
+        return.vec[c(paste0(name, ".m"), paste0(name, ".sd"))] <- NA
+      }
+      else
+      {
+        m <- mean(s, na.rm = TRUE)
+        sd <- sd(s, na.rm = TRUE)
+
+        return.vec[paste0(name, ".m")] <- m
+        return.vec[paste0(name, ".sd")] <- sd
+      }
     }
 
-    pd.col <- as.factor(as.character(pd.col))
-    ctrl.col <- as.factor(as.character(ctrl.col))
-
-    pd.c <- sum(pd.col == levels(pd.col)[1], na.rm = TRUE)
-    ctrl.c <- sum(ctrl.col == levels(ctrl.col)[1], na.rm = TRUE)
-
-    pd.p <- pd.c / length(pd.col)
-    ctrl.p <- ctrl.c / length(ctrl.col)
-
-    total.c <- sum(total.col == levels(pd.col)[1], na.rm = TRUE)
-    total.p <- total.c / length(total.col)
-
-    message(paste(col, "is a factor vector. Returning count for",
-                  levels(pd.col)[1]))
-
-    return.vec <- c(pd.c, pd.p, ctrl.c, ctrl.p, NA, total.c, total.p)
+    # else if (is.factor(s)) | is.character(s))
+    # {}
   }
-
-  if (all(is.na(pd.col)))
-  {
-    warning(paste("PD col", col, "is NAs"))
-    return.vec[1:2] <- NA
-  }
-
-  if (all(is.na(ctrl.col)))
-  {
-    warning(paste("Control col", col, "is NAs"))
-    return.vec[3:4] <- NA
-  }
-
 
   return(return.vec)
 }

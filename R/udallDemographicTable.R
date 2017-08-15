@@ -5,7 +5,10 @@
 #' udallDemographicTable (e.g. factor conversions).
 #'
 #' @param data Data from which to select the columns.
-#' @param columns List of columns that exist in data.
+#' @param columns List of columns to summarize, all must exist in data.
+#' @param group.by Variable to group subjects by.
+#' @param group.ok List of groups to include in the sorting; defaults to all
+#' options in group.by if not given.
 #'
 #' @return A data frame with the inputted columns on the left and seven columns:
 #' PD group mean/count; PD group SD/percent; control group mean/count; control
@@ -15,35 +18,23 @@
 #' @export
 #'
 
-udallDemographicTable <- function(data, columns)
+udallDemographicTable <- function(data, columns, group.by, group.ok = NULL)
 {
-  if (sum(data$parkinsonism_status %in% c("PD", "Unaffected")) > 0)
+  if (is.null(group.ok))
   {
-    warning(paste("Subjects have PD status besides \"PD\" or \"Unaffected\".",
-                  "Skipping them."))
-
-    data <- data[data$parkinsonism_status %in% c("PD", "Unaffected"), ]
+    group.ok <- unique(data[, group.by])
+  }
+  else
+  {
+    group.ok <- group.ok[group.ok %in% data[, group.by]]
   }
 
   # Use sapply instead of a loop to go over the columns, t() because the
   ## resulting data table is rotated 90 degrees over what we'd prefer.
-  results <- t(sapply(columns, testVariable, all.subjects = data))
-  colnames(results) <- c("PD.m", "PD.sd", "C.m", "C.sd", "p", "T.m", "T.sd")
+  results <- t(sapply(columns, testVariable, all.subjects = data,
+                      grouping = group.by, groups = group.ok))
+  # colnames(results) <- c("PD.m", "PD.sd", "C.m", "C.sd", "p", "T.m", "T.sd")
 
   return(results)
 }
-
-# data <- read.csv("closestVisits-20170724.csv")
-# data[data < 0] <- NA
-#
-
-
-# test.var("agevisit")
-# test.var("education_years")
-# test.var("updrs_new_3_total")
-# test.var("hoehn_and_yahr_m0")
-# test.var("gender")
-# test.var("handedness")
-
-# round(results, 3)
 
