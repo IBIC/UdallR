@@ -99,12 +99,16 @@ testVariable <- function(col, all.subjects, grouping, groups){
         warnings("Error: More than two factor levels in column.")
       }
 
-      count <- sum(s == levels(s)[1], na.rm = TRUE)
+      total.c <- sum(total.omitted[, col] == levels(s)[1], na.rm = TRUE)
+      return.vec["total.m"] <- total.c
+      return.vec["total.sd"] <- total.c / length(total.omitted[, col])
 
+      count <- sum(s == levels(s)[1], na.rm = TRUE)
       proportion <- count / length(s)
 
       return.vec[paste0(name, ".m")] <- count
       return.vec[paste0(name, ".sd")] <- proportion
+
 
       # total.c <- sum(total.col == levels(pd.col)[1], na.rm = TRUE)
       # total.p <- total.c / length(total.col)
