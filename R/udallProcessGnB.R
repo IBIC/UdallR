@@ -22,17 +22,23 @@ udallProcessGnB <- function(xlsx, write = NA) {
   data.l <- as.list(rep(NA, 4))
   names(data.l) <- sheets
 
-  for (s in sheets)
-    data.l[[s]] <- read_excel(xlsx, sheet = s)
+  output <- as.list(rep(NA, 4))
+  names(output) <- sheets
+
+  for (i in 1:length(sheets))
+  {
+    s <- sheets[i]
+    data.l[[i]] <- read_excel(xlsx, sheet = s)
+    output[[i]] <- transformGnB(data.l[[i]])
+  }
 
   if (!is.na(write))
-    for (i in 1:length(data.l))
-      write.csv(transformGnB(data.l[[i]]), file = paste0(write, "/",
-                                                         names(data.l)[i],
-                                                         ".csv"),
+    for (s in sheets)
+      write.csv(output$s, file = paste0(write, "/", s, ".csv"),
                 row.names = FALSE)
 
-  return(data.l)
+
+  return(output)
 }
 
 

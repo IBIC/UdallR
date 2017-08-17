@@ -80,7 +80,7 @@ transformGnB <- function(dat) {
   group_XXX <- dat$groups
   date_XXX <- as.Date(gsub("-.*$", "", dat$record_date), format="%Y%m%d")
 
-  redcap_event_name <- paste0(ifelse(session_sway == 1, "on", "off"), "_arm_1")
+  redcap_event_name <- paste0(ifelse(session_XXX == 1, "on", "off"), "_arm_1")
   complete <- 2
 
   # This selects the Trial Notes column and all the columns after the last
