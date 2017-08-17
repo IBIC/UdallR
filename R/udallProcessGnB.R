@@ -1,5 +1,9 @@
 #' Process gait and balance data
 #'
+#' Loads gait and balance data from an .xlsx file with (minimally) sheets
+#' {ST,DT}_{Sway,Gait}. Runs through transformGnB() to clean up and writes to
+#' file if directed to.
+#'
 #' @param xlsx Location of the xlsx file with the relevant gait and balance
 #' data, relative to the current working directory.
 #' @param write Location to save output CSV files to. Defaults to NA, which

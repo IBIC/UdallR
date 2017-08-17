@@ -38,7 +38,7 @@ testVariable <- function(col, all.subjects, grouping, groups){
                                                                       "p")
 
 
-  # Only total subjets that belong to an eligible group
+  # Only total subjects that belong to an eligible group
   # Assign total information to total.*
   total <- all.subjects[all.subjects[, grouping] %in% groups, c(grouping, col)]
 
@@ -89,9 +89,30 @@ testVariable <- function(col, all.subjects, grouping, groups){
         return.vec[paste0(name, ".sd")] <- sd
       }
     }
+    else if (is.factor(s) || is.character(s))
+    {
+      s <- as.factor(s)
+      message(paste(col, "is a factor vector. Returning count for",
+                    levels(s)[1]))
+      if (length(levels(s)) != 2)
+      {
+        warnings("Error: More than two factor levels in column.")
+      }
 
-    # else if (is.factor(s)) | is.character(s))
-    # {}
+      count <- sum(s == levels(s)[1], na.rm = TRUE)
+
+      proportion <- count / length(s)
+
+      return.vec[paste0(name, ".m")] <- count
+      return.vec[paste0(name, ".sd")] <- proportion
+
+      # total.c <- sum(total.col == levels(pd.col)[1], na.rm = TRUE)
+      # total.p <- total.c / length(total.col)
+      #
+      #
+      #
+      # return.vec <- c(pd.c, pd.p, ctrl.c, ctrl.p, NA, total.c, total.p)
+    }
   }
 
   return(return.vec)

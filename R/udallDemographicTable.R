@@ -33,7 +33,6 @@ udallDemographicTable <- function(data, columns, group.by, group.ok = NULL)
   ## resulting data table is rotated 90 degrees over what we'd prefer.
   results <- t(sapply(columns, testVariable, all.subjects = data,
                       grouping = group.by, groups = group.ok))
-  # colnames(results) <- c("PD.m", "PD.sd", "C.m", "C.sd", "p", "T.m", "T.sd")
 
   return(results)
 }

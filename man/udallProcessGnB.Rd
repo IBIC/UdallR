@@ -17,5 +17,7 @@ signals no write-out.}
 data.l A list of data frames with the transformed data.
 }
 \description{
-Process gait and balance data
+Loads gait and balance data from an .xlsx file with (minimally) sheets
+{ST,DT}_{Sway,Gait}. Runs through transformGnB() to clean up and writes to
+file if directed to.
 }

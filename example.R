@@ -65,4 +65,4 @@ udallDemographicTable(closest.visits, c(demographics, pd.symptoms, cog),
 # write.csv(checked, file = paste0("upload-", Sys.Date(), ".csv"),
 #           row.names = FALSE)
 
-udallProcessGnB("data/GB-20170816.xlsx", write = "")
+gnb <- udallProcessGnB("data/GB-20170816.xlsx", write = ".")
