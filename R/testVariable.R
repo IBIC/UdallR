@@ -106,6 +106,8 @@ testVariable <- function(col, all.subjects, grouping, groups){
       count <- sum(s == levels(s)[1], na.rm = TRUE)
       proportion <- count / length(s)
 
+
+
       return.vec[paste0(name, ".m")] <- count
       return.vec[paste0(name, ".sd")] <- proportion
 
@@ -118,6 +120,26 @@ testVariable <- function(col, all.subjects, grouping, groups){
       # return.vec <- c(pd.c, pd.p, ctrl.c, ctrl.p, NA, total.c, total.p)
     }
   }
+
+  # Run a chi-square test on the factor variables by reconstructing
+  ## contigency table from return.vec and running chi-square if all variables
+  ## are present.
+  if (is.na(return.vec["p"]))
+  {
+    tbl <- matrix(NA, nrow = length(subsets), ncol = length(groups))
+    colnames(tbl) <- names(subsets)
+
+    tbl[, 1] <- return.vec[paste0(names(subsets), ".m")]
+    tbl[, 2] <- tbl[, 1] / return.vec[paste0(names(subsets), ".sd")]
+
+    if (all(tbl > 0) && !is.na(all(tbl > 0)))
+      p <- chisq.test(tbl)$p.value
+    else
+      p <- NA
+
+    return.vec["p"] <- p
+  }
+
 
   return(return.vec)
 }
