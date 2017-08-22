@@ -3,19 +3,12 @@
 #' @return dat Data frame with missing data codes assigned to NA
 #' @export
 udallReplaceMissing <- function(dat) {
-    dat[dat == -900] <- NA
-    dat[dat== -901] <- NA
-    dat[dat == -902] <- NA
-    dat[dat == -903] <- NA
-    dat[dat == -904] <- NA
-    dat[dat == -905] <- NA
+  codes <- c(-800:-804, -810:-814, -888,
+             -900:-906, -994:-999)
 
-    dat[dat == "-900"] <- NA
-    dat[dat== "-901"] <- NA
-    dat[dat == "-902"] <- NA
-    dat[dat == "-903"] <- NA
-    dat[dat == "-904"] <- NA
-    dat[dat == "-905"] <- NA    
+  dat[dat %in% codes] <- NA
+  dat[dat %in% as.character(codes)] <- NA
 
-    return(dat)
+
+  return(dat)
 }
