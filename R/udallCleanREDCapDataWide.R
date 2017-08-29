@@ -161,6 +161,8 @@ udallCleanREDCapDataWide <- function(dat, visit = 1) {
   # PD is 1, control is 2
   levels(merged$group) <- c("pd", "control")
 
+  merged <- udallReplaceMissing(merged)
+
   # score various assessments
   merged <- scoreFOG(merged)
 
@@ -218,7 +220,6 @@ udallCleanREDCapDataWide <- function(dat, visit = 1) {
   #    if (is.numeric(merged[, c]))
   #      merged[, c]  <- ifelse(merged[, c] < -799, NA, merged[, c])
   #  }
-  merged <- udallReplaceMissing(merged)
 
   return(merged)
 }

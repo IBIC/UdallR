@@ -6,9 +6,20 @@ udallReplaceMissing <- function(dat) {
   codes <- c(-800:-804, -810:-814, -888,
              -900:-906, -994:-999)
 
-  dat[dat %in% codes] <- NA
-  dat[dat %in% as.character(codes)] <- NA
+  # n.strip <- as.data.frame(apply(dat, 1, function(x) {x[x %in% codes] <- NA}))
+  #
+  # dat[dat %in% codes] <- NA
+  # dat[dat %in% as.character(codes)] <- NA
 
+  new <- dat
 
-  return(dat)
+  for (col in colnames(new))
+  {
+    temp <- new[, col]
+    temp[temp %in% codes] <- NA
+    temp[temp %in% temp %in% as.character(codes)] <- NA
+    new[, col] <- temp
+  }
+
+  return(new)
 }

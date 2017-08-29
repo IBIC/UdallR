@@ -59,11 +59,11 @@ udallDemographicTable(closest.visits, c(demographics, pd.symptoms, cog),
                       group.by = "parkinsonism_status",
                       group.ok = c("PD", "Unaffected"))
 
-# checked <- checked[, !grepl("redcap_event_name", colnames(checked))]
-# checked$redcap_event_name <- "visit_for_mri_1_arm_3"
-#
-# write.csv(checked, file = paste0("upload-", Sys.Date(), ".csv"),
-#           row.names = FALSE)
+checked <- checked[, !grepl("redcap_event_name", colnames(checked))]
+checked$redcap_event_name <- "visit_for_mri_1_arm_3"
+
+write.csv(checked, file = paste0("upload-", Sys.Date(), ".csv"),
+          row.names = FALSE)
 
 
 # Load in gait and balance data from Excel spreadsheet
