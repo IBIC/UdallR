@@ -31,8 +31,8 @@ udallDemographicTable <- function(data, columns, group.by, group.ok = NULL)
 
   # Use sapply instead of a loop to go over the columns, t() because the
   ## resulting data table is rotated 90 degrees over what we'd prefer.
-  results <- t(sapply(columns, testVariable, all.subjects = data,
-                      grouping = group.by, groups = group.ok))
+  results <- as.data.frame(t(sapply(columns, testVariable, all.subjects = data,
+                                    grouping = group.by, groups = group.ok)))
 
   return(results)
 }
