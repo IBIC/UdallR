@@ -72,3 +72,24 @@ gnb <- udallProcessGnB("data/GB-20170816.xlsx", write = ".")
 # Calcuate task cost measures for sway and gait tasks.
 sway.cost <- udallCalculateCost(gnb$ST_Sway, gnb$DT_Sway)
 gait.cost <- udallCalculateCost(gnb$ST_Gait, gnb$DT_Gait)
+
+# Get list of analyzeable subjects
+controls <- cdat[cdat$group == "control", ]
+pds <- cdat[cdat$group == "pd", ]
+
+axcpt.controls <- controls$idnum[controls$on_analyze_axcpt_fmri == 1 &
+                                   !(is.na(controls$on_analyze_axcpt_fmri))]
+axcpt.pd.on <- pds$idnum[pds$on_analyze_axcpt_fmri == 1 &
+                                !(is.na(pds$on_analyze_axcpt_fmri))]
+axcpt.pd.off <- pds$idnum[pds$off_analyze_axcpt_fmri == 1 &
+                           !(is.na(pds$off_analyze_axcpt_fmri))]
+axcpt.pd.both <- intersect(axcpt.pd.on, axcpt.pd.off)
+
+write.table(axcpt.controls, file = "axcpt-controls.txt", row.names = FALSE,
+            col.names = FALSE)
+write.table(axcpt.pd.on, file = "axcpt-pd-on.txt", row.names = FALSE,
+            col.names = FALSE)
+write.table(axcpt.pd.off, file = "axcpt-pd-off.txt", row.names = FALSE,
+            col.names = FALSE)
+write.table(axcpt.pd.both, file = "axcpt-pd-both.txt", row.names = FALSE,
+            col.names = FALSE)

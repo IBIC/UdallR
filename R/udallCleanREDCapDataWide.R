@@ -39,10 +39,19 @@ udallCleanREDCapDataWide <- function(dat, visit = 1) {
   beh <- subset(dat, redcap_event_name == paste0("behavioral_", arm))
   genetic <- subset(dat, redcap_event_name == "genetic_data_arm_5")
 
+  analyze <- subset(dat, redcap_event_name == "study_inclusion_arm_4")
+  analyze <- analyze[, c("idnum", "include")]
+  analyze$include <- as.logical(analyze$include)
+
   # Analyze column is the same either way
-  analyze <- subset(dat, redcap_event_name == "analyze_arm_4")
-  analyze <- analyze[, c("idnum", "analyze_visit_1", "analyze_visit_2")]
-  analyze[, 2:3] <- apply(analyze[, 2:3], 2, as.logical)
+  # analyze.on <- on[, c("idnum", "analyze_all", "analyze_axcpt_fmri",
+  #                        "analyze_rest_fmri", "analyze_behavior")]
+  # analyze.off <- off[, c("idnum", "analyze_axcpt_fmri",
+  #                      "analyze_rest_fmri", "analyze_behavior")]
+  #
+  # analyze <- merge(analyze.on, analyze.off, by = "idnum",
+  #                  suffixes = c(".on", ".off"))
+
 
   # Arm 3, which has the closests visit that has been reuploaded to REDCap
   closest.visit <- subset(dat, redcap_event_name == "visit_for_mri_1_arm_3")
@@ -121,22 +130,33 @@ udallCleanREDCapDataWide <- function(dat, visit = 1) {
   # This is a crude check on that! If you get this kind of problem, go back to the database and figure out what records you've added incorrectly.
   merged <- merge(on, off, by = "idnum", all.x = TRUE, all.y = TRUE)
 
+  merged <- merge(merged, analyze, by = "idnum")
+
+  if (sum(!merged$include) > 0)
+  {
+    message(paste("Dropping", sum(!merged$include),
+                  "subjects from whole study: ",
+                  paste(merged$idnum[!merged$include], collapse = " ")))
+
+    merged <- merged[merged$include, ]
+  }
+
   n <- dim(merged)[1]
 
   # merge in the behavioral data
-  merged <- merge(merged, beh, by = "idnum", all.x = TRUE, all.y = TRUE)
+  merged <- merge(merged, beh, by = "idnum", all.x = TRUE)
   stopifnot(n == dim(merged)[1])
 
   #merge in the genetic data
-  merged <- merge(merged, genetic, by = "idnum", all.x = TRUE, all.y = TRUE)
+  merged <- merge(merged, genetic, by = "idnum", all.x = TRUE)
   stopifnot(n == dim(merged)[1])
 
   # merge in the analysis flag
-  merged <- merge(merged, analyze, by = "idnum", all.x = TRUE, all.y = TRUE)
-  stopifnot(n == dim(merged)[1])
+  # merged <- merge(merged, analyze, by = "idnum", all.x = TRUE)
+  # stopifnot(n == dim(merged)[1])
 
   # merge in clinical core visit
-  merged <- merge(merged, closest.visit, by = "idnum", all.x=TRUE,all.y=TRUE)
+  merged <- merge(merged, closest.visit, by = "idnum", all.x = TRUE)
   stopifnot(n == dim(merged)[1])
 
   merged <- merged[, !grepl("on_off", colnames(merged))]
@@ -187,30 +207,30 @@ udallCleanREDCapDataWide <- function(dat, visit = 1) {
 
   # Identify subjects who should be included in the study only
   # If there are NAs present let us count them as true - perhaps missing data means they have not yet been evaluated.
-  if (visit == 1)
-  {
-    if (sum(is.na(merged$analyze_visit_1)) > 0)
-    {
-      logError(merged, is.na(merged$analyze_visit_1),
-               "No visit 1 analyze entry. Including by default",
-               "analyze_visit_1", NA)
-    }
-
-    merged$analyze_visit_1[is.na(merged$analyze_visit_1)] <- TRUE
-    merged <- merged[merged$analyze_visit_1 ==TRUE, ]
-  }
-  else if (visit == 2)
-  {
-    if (sum(is.na(merged$analyze_visit_2)) > 0)
-    {
-      logError(merged, is.na(merged$analyze_visit_2),
-               "No visit 2 analyze entry. Including by default",
-               "analyze_visit_2", NA)
-    }
-
-    merged$analyze_visit_2[is.na(merged$analyze_visit_2)] <- TRUE
-    merged <- merged[merged$analyze_visit_2 ==TRUE, ]
-  }
+  # if (visit == 1)
+  # {
+  #   if (sum(is.na(merged$analyze_visit_1)) > 0)
+  #   {
+  #     logError(merged, is.na(merged$analyze_visit_1),
+  #              "No visit 1 analyze entry. Including by default",
+  #              "analyze_visit_1", NA)
+  #   }
+  #
+  #   merged$analyze_visit_1[is.na(merged$analyze_visit_1)] <- TRUE
+  #   merged <- merged[merged$analyze_visit_1 ==TRUE, ]
+  # }
+  # else if (visit == 2)
+  # {
+  #   if (sum(is.na(merged$analyze_visit_2)) > 0)
+  #   {
+  #     logError(merged, is.na(merged$analyze_visit_2),
+  #              "No visit 2 analyze entry. Including by default",
+  #              "analyze_visit_2", NA)
+  #   }
+  #
+  #   merged$analyze_visit_2[is.na(merged$analyze_visit_2)] <- TRUE
+  #   merged <- merged[merged$analyze_visit_2 ==TRUE, ]
+  # }
 
   # This is dangerous - do not assume blanket error codes. Use udallReplaceMissing function
   # Replace error codes ([-800, -900]) with NAs
