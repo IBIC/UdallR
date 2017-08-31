@@ -14,7 +14,7 @@ for (package in c("REDCapR", "devtools"))
 
 # Install the custom UdallR library. You may have to change the path, depending
 ## on where you downloaded UdallR to.
-install("UdallR", quiet = TRUE)
+install("~/UdallR", quiet = TRUE)
 library(UdallR, quietly = TRUE,  warn.conflicts = FALSE)
 
 # It isn't secure to upload access tokens to GitHub, so store your access token
