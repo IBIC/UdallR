@@ -30,7 +30,7 @@ getNearestRow <- function(x, multivis)
   }
 
   # Dates for subject
-  subj.subset <- multivis[multivis$subject_id==new.id, ]
+  subj.subset <- multivis[multivis$subject_id == new.id, ]
 
   # Ages at different visits
   ages <- subj.subset$agevisit

@@ -14,7 +14,7 @@ for (package in c("REDCapR", "devtools"))
 
 # Install the custom UdallR library. You may have to change the path, depending
 ## on where you downloaded UdallR to.
-install("~/UdallR", quiet = TRUE)
+install("~/UdallR", quietly = TRUE)
 library(UdallR, quietly = TRUE,  warn.conflicts = FALSE)
 
 today <- gsub("[^0-9]", "", Sys.Date())
@@ -22,7 +22,7 @@ outfile <- paste0("closestVisits-", today, ".csv")
 
 # It isn't secure to upload access tokens to GitHub, so store your access token
 ## in a file like this so R can read it.
-rc.token <- readChar("access-token.txt", nchars = 32)
+rc.token <- readChar("~/UdallR/access-token.txt", nchars = 32)
 
 # Read the data from the REDCap API. "stringsAsFactors" stops R from treating
 ## important strings as factors (which when written to file, are written as the
@@ -38,7 +38,7 @@ cdat <- udallCleanREDCapDataWide(dat, visit = 1)
 # Get the closest visits, comparing to the most recent multivis
 ## UPDATE THIS LINE WHEN NECESSARY
 closest.visits  <- getClosestACVisit(cdat,
-                                     multivis.df = panuc_multivis_2017_07_17)
+                                     multivis.df = panuc_multivis_2017_09_01)
 
 # Get the numeric id from the PWAXX-XXXX string
 idnum <- gsub("[^0-9]", "", closest.visits$summary_id)
