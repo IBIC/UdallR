@@ -181,7 +181,11 @@ udallCleanREDCapDataWide <- function(dat, visit = 1) {
   # PD is 1, control is 2
   levels(merged$group) <- c("pd", "control")
 
+
   merged <- udallReplaceMissing(merged)
+
+  merged$dx_dominant_side <- as.factor(merged$dx_dominant_side)
+  levels(merged$dx_dominant_side) <- c("left", "right")
 
   # score various assessments
   merged <- scoreFOG(merged)

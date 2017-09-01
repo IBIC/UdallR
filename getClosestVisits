@@ -14,7 +14,7 @@ for (package in c("REDCapR", "devtools"))
 
 # Install the custom UdallR library. You may have to change the path, depending
 ## on where you downloaded UdallR to.
-install("~/UdallR", quietly = TRUE)
+install("~/UdallR", quiet = TRUE)
 library(UdallR, quietly = TRUE,  warn.conflicts = FALSE)
 
 today <- gsub("[^0-9]", "", Sys.Date())
@@ -38,7 +38,7 @@ cdat <- udallCleanREDCapDataWide(dat, visit = 1)
 # Get the closest visits, comparing to the most recent multivis
 ## UPDATE THIS LINE WHEN NECESSARY
 closest.visits  <- getClosestACVisit(cdat,
-                                     multivis.df = panuc_multivis_2017_09_01)
+                                     multivis.df = panuc_multivis_2017_09_0)1
 
 # Get the numeric id from the PWAXX-XXXX string
 idnum <- gsub("[^0-9]", "", closest.visits$summary_id)
