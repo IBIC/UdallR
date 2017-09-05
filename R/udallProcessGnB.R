@@ -34,10 +34,8 @@ udallProcessGnB <- function(xlsx, write = NA) {
 
   if (!is.na(write))
     for (s in sheets)
-      write.csv(output$s, file = paste0(write, "/", s, ".csv"),
+      write.csv(output[[s]], file = paste0(write, "/", s, ".csv"),
                 row.names = FALSE)
-
-
   return(output)
 }
 
