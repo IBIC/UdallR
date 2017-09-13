@@ -29,6 +29,7 @@ udallProcessGnB <- function(xlsx, write = NA) {
   {
     s <- sheets[i]
     data.l[[i]] <- read_excel(xlsx, sheet = s)
+    data.l[[i]] <- data.l[[i]][, !grepl("^X__", colnames(data.l[[i]]))]
     output[[i]] <- transformGnB(data.l[[i]])
   }
 

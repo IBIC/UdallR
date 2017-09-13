@@ -67,7 +67,8 @@ write.csv(checked, file = paste0("upload-", Sys.Date(), ".csv"),
 
 
 # Load in gait and balance data from Excel spreadsheet
-gnb <- udallProcessGnB("data/gaitbalance-170816.xlsx", write = ".")
+gnb <- udallProcessGnB("~/UdallR/data/gaitbalance-170816.xlsx",
+                       write = "~/UdallR")
 
 # Calcuate task cost measures for sway and gait tasks.
 sway.cost <- udallCalculateCost(gnb$ST_Sway, gnb$DT_Sway)
