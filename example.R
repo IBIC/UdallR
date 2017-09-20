@@ -19,7 +19,7 @@ library(UdallR, quietly = TRUE,  warn.conflicts = FALSE)
 
 # It isn't secure to upload access tokens to GitHub, so store your access token
 ## in a file like this so R can read it.
-rc.token <- readChar("UdallR/access-token.txt", nchars = 32)
+rc.token <- readChar("~/UdallR/access-token.txt", nchars = 32)
 
 # Read the data from the REDCap API. "stringsAsFactors" stops R from treating
 ## important strings as factors (which when written to file, are written as the
@@ -41,7 +41,7 @@ checked <- udallCheckDataWide(cdat, error.file = "REDCap-errors.txt")
 udallCrosscheckEntries(cdat, error.file = "mismatch-errors.txt")
 
 closest.visits <- getClosestACVisit(cdat,
-                                    multivis.df = panuc_multivis_2017_09_01)
+                                    multivis.df = panuc_multivis_2017_09_14)
 
 demographics <- c("agevisit", "education_years", "gender", "handedness")
 pd.symptoms <- c("hoehn_and_yahr_m0", "dx_dominant_side", "updrs_new_1_total",
@@ -67,7 +67,7 @@ write.csv(checked, file = paste0("upload-", Sys.Date(), ".csv"),
 
 
 # Load in gait and balance data from Excel spreadsheet
-gnb <- udallProcessGnB("~/UdallR/data/gaitbalance-170816.xlsx",
+gnb <- udallProcessGnB("~/UdallR/data/gaitbalance-170912.xlsx",
                        write = "~/UdallR")
 
 # Calcuate task cost measures for sway and gait tasks.
