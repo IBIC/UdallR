@@ -16,6 +16,7 @@
 
 udallProcessGnB <- function(xlsx, write = NA) {
   library(readxl)
+  today <- format(Sys.Date(), format = "%Y%m%d")
 
   sheets <- c("ST_Sway", "DT_Sway", "ST_Gait", "DT_Gait")
 
@@ -35,7 +36,7 @@ udallProcessGnB <- function(xlsx, write = NA) {
 
   if (!is.na(write))
     for (s in sheets)
-      write.csv(output[[s]], file = paste0(write, "/", s, ".csv"),
+      write.csv(output[[s]], file = paste0(write, "/", s, "-", today, ".csv"),
                 row.names = FALSE)
   return(output)
 }
