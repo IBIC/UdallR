@@ -18,7 +18,7 @@ install("~/UdallR", quiet = TRUE)
 library(UdallR, quietly = TRUE,  warn.conflicts = FALSE)
 
 today <- gsub("[^0-9]", "", Sys.Date())
-outfile <- paste0("closestVisits-", today, ".csv")
+outfile <- paste0("closest-visits/closestVisits-", today, ".csv")
 
 # It isn't secure to upload access tokens to GitHub, so store your access token
 ## in a file like this so R can read it.

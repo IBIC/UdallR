@@ -31,11 +31,11 @@ getClosestACVisit <- function(dat, multivis.df = NULL, multivis.file = NULL,
   }
   else if (!is.null(multivis.df))
   {
-    multivis.dat <- multivis.df
+    multivis.temp <- multivis.df
   }
   else if (!is.null(multivis.file))
   {
-    multivis.dat <- read.csv(multivis.file, header = TRUE,
+    multivis.temp <- read.csv(multivis.file, header = TRUE,
                               stringsAsFactors = FALSE)
     colnames(multivis.dat) <- tolower(colnames(multivis.dat))
   }
@@ -43,6 +43,9 @@ getClosestACVisit <- function(dat, multivis.df = NULL, multivis.file = NULL,
   {
     stop("Cannot set both multivis file and multivis data frame.")
   }
+
+  # Clean multivis
+  multivis.dat <- udallReplaceMissing(multivis.temp)
 
   # Get the nearest row from the multivis based on the REDCap data (dat)
   closest.visit <- as.data.frame(t(apply(X = dat, MARGIN = 1,

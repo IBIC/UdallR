@@ -50,8 +50,9 @@ getNearestRow <- function(x, multivis)
     # Check whether any vists are within 6 months (= half a year)
     if (all(dates.diff > 0.5, na.rm = TRUE))
     {
-      warning(paste(ID, "doesn't have any visits within ±3 months.",
-                    "Choosing nearest visit."))
+      warning(paste(ID, "doesn't have any visits within ±6 months.",
+                    "Choosing nearest visit (", round(dates.diff * 12, 3),
+                    " months)"))
     }
 
     # Get the row closest in age to the patient's MRI visit.

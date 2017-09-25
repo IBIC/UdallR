@@ -13,12 +13,22 @@ udallReplaceMissing <- function(dat) {
 
   new <- dat
 
-  for (col in colnames(new))
+  if (is.data.frame(dat))
   {
-    temp <- new[, col]
+    for (col in colnames(new))
+    {
+      temp <- new[, col]
+      temp[temp %in% codes] <- NA
+      temp[temp %in% temp %in% as.character(codes)] <- NA
+      new[, col] <- temp
+    }
+  }
+  else
+  {
+    temp <- new
     temp[temp %in% codes] <- NA
     temp[temp %in% temp %in% as.character(codes)] <- NA
-    new[, col] <- temp
+    new <- temp
   }
 
   return(new)
