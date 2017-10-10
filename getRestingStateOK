@@ -1,0 +1,53 @@
+#!/usr/local/bin/Rscript
+
+# Load libraries required to download from REDCap and install custom packages.
+# This loop installs missing pacakges.
+
+for (package in c("REDCapR", "devtools"))
+{
+  if (!require(package, character.only = TRUE))
+  {
+    install.packages(package)
+    library(package, character.only = TRUE)
+  }
+}
+
+# Install the custom UdallR library. You may have to change the path, depending
+## on where you downloaded UdallR to.
+install("~/UdallR", quiet = TRUE)
+library(UdallR, quietly = TRUE,  warn.conflicts = FALSE)
+
+today <- gsub("[^0-9]", "", Sys.Date())
+outfile <- paste0("closest-visits/closestVisits-", today, ".csv")
+
+# It isn't secure to upload access tokens to GitHub, so store your access token
+## in a file like this so R can read it.
+rc.token <- readChar("~/UdallR/access-token.txt", nchars = 32)
+
+# Read the data from the REDCap API. "stringsAsFactors" stops R from treating
+## important strings as factors (which when written to file, are written as the
+## underlying numeric representation.
+dat <- as.data.frame(redcap_read(redcap_uri = "https://redcap.iths.org/api/",
+                                 token = rc.token),
+                     stringsAsFactors = FALSE)
+
+# Test the UdallR cleaning function
+# The visit variable doesn't do much right now.
+cdat <- udallCleanREDCapDataWide(dat, visit = 1)
+
+on.rest.ok <- as.logical(cdat$on_analyze_rest_fmri)
+off.rest.ok <- as.logical(cdat$off_analyze_rest_fmri)
+
+if (sum(is.na(on.rest.ok)) > 0)
+    message(paste(sum(is.na(on.rest.ok)), "subjects have NA on rest status."))
+
+if (sum(is.na(off.rest.ok)) > 0)
+    message(paste(sum(is.na(on.rest.ok)), "subjects have NA off rest status."))
+
+on.rest.subjs <- cdat$idnum[sapply(on.rest.ok, isTRUE)]
+off.rest.subjs <- cdat$idnum[sapply(off.rest.ok, isTRUE)]
+
+write.csv(file = "on-rest-OK.txt", on.rest.subjs, quote = FALSE,
+            row.names = FALSE)
+write.csv(file = "off-rest-OK.txt", off.rest.subjs, quote = FALSE,
+            row.names = FALSE)
