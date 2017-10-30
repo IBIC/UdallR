@@ -1,7 +1,7 @@
 # Load libraries required to download from REDCap and install custom packages.
 # This loop installs missing pacakges.
 
-setwd("~")
+# setwd("~")
 
 for (package in c("REDCapR", "devtools"))
 {

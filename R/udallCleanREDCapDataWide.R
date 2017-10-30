@@ -72,9 +72,9 @@ udallCleanREDCapDataWide <- function(dat, visit = 1) {
   # on <- on[, !blank]
 
   # Select a subset of columns for behavior and genetic axcpt.cols <-
-  axcpt.cols <- c("on_axcpt_correctdetection", "on_axcpt_falsealarm"
-                  ,"on_axcpt_correctnontarget" ,"on_axcpt_rawdiff", "on_axcpt_dprime"
-                  ,"on_axcpt_rtcd" ,"on_axcpt_rtcntd" ,"on_ax_rawcorrect",
+  axcpt.cols <- c("on_axcpt_correctdetection", "on_axcpt_falsealarm",
+                  "on_axcpt_correctnontarget" ,"on_axcpt_rawdiff", "on_axcpt_dprime",
+                  "on_axcpt_rtcd" ,"on_axcpt_rtcntd" ,"on_ax_rawcorrect",
                   "on_bx_rawcorrect" ,"on_by_rawcorrect" ,"on_ay_rawcorrect",
                   "on_ax_percent" ,"on_bx_percent" ,"on_by_percent" ,"on_ay_percent",
                   "on_ax_rt" ,"on_bx_rt" ,"on_by_rt" ,"on_ay_rt" ,"on_ax_sd","on_bx_sd", "on_by_sd" ,"on_ay_sd",
@@ -93,12 +93,14 @@ udallCleanREDCapDataWide <- function(dat, visit = 1) {
   genetic.colnames <- c("idnum", "apoe", "apoe4", "gbastatus", "gba",
                         "genetic_data_complete")
 
+  dx.colnames <- grep("dx", colnames(dat))
+
   # # There are so many closest column names, load them from file.
   # data("Codebook_PaNUC_2017_07_07")
   # closest.colnames <- as.character(Codebook_PaNUC_2017_07_07$Stata_Variable_Name)
 
 
-  closest.colnames <- tolower(colnames(panuc_multivis_2017_10_05))
+  closest.colnames <- tolower(colnames(panuc_multivis_2017_10_26))
   closest.colnames <- closest.colnames[closest.colnames != ""]
   closest.colnames <- c("idnum",
                         closest.colnames[closest.colnames %in% colnames(dat)])
@@ -107,7 +109,7 @@ udallCleanREDCapDataWide <- function(dat, visit = 1) {
 
   beh <- beh[, behcolnames]
   genetic <- genetic[, genetic.colnames]
-  closest.visit <- closest.visit[, closest.colnames]
+  closest.visit <- data.frame(closest.visit[, closest.colnames])
 
   # rename columns for off and on conditions
   colnames(off) <- paste0("off_", colnames(off))
@@ -121,8 +123,8 @@ udallCleanREDCapDataWide <- function(dat, visit = 1) {
   on <- renameFreeSurfer(on)
 
   # rename subject id from each of these - I like it to be idnum
-  names(on)[names(on)=="on_idnum"] <- "idnum"
-  names(off)[names(off)=="off_idnum"]  <- "idnum"
+  names(on)[names(on) == "on_idnum"] <- "idnum"
+  names(off)[names(off) == "off_idnum"]  <- "idnum"
 
   # merge these data frames together from idnum
   # Note that there will be a problem if we "grow" the number of records by merging additional arms -

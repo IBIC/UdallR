@@ -13,7 +13,7 @@ udallReplaceMissing <- function(dat) {
 
   new <- dat
 
-  if (is.data.frame(dat))
+  if (is.data.frame(new))
   {
     for (col in colnames(new))
     {
@@ -22,9 +22,7 @@ udallReplaceMissing <- function(dat) {
       temp[temp %in% temp %in% as.character(codes)] <- NA
       new[, col] <- temp
     }
-  }
-  else
-  {
+  } else {
     temp <- new
     temp[temp %in% codes] <- NA
     temp[temp %in% temp %in% as.character(codes)] <- NA
