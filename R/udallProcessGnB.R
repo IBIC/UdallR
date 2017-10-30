@@ -34,10 +34,13 @@ udallProcessGnB <- function(xlsx, write = NA) {
     output[[i]] <- transformGnB(data.l[[i]])
   }
 
+  merged <- merge(merge(merge(output[[1]], output[[2]]), output[[3]]),
+                output[[4]])
+
   if (!is.na(write))
-    for (s in sheets)
-      write.csv(output[[s]], file = paste0(write, "/", s, "-", today, ".csv"),
+      write.csv(merged, file = paste0(write, "/udall-SG-", today, ".csv"),
                 row.names = FALSE)
+
   return(output)
 }
 
