@@ -28,6 +28,16 @@ scoreUPDRS <- function(dat) {
   dat[, "on_updrs_3_total"] <- apply(sub[,on_updrs_3_colnames], 1, sum,
                                      na.rm=TRUE)
 
+  # calculate left and right hemispheric symptoms
+    dat$on_left_symptoms <- dat$on_updrs_3_4_l + dat$on_updrs_3_5_l +
+dat$on_updrs_3_6_l + dat$on_updrs_3_7_l + dat$on_updrs_3_8_l +
+dat$on_updrs_3_15_l + dat$on_updrs_3_16_l + dat$on_updrs_3_17_lue +
+dat$on_updrs_3_17_lle 
+
+    dat$on_right_symptoms <- dat$on_updrs_3_4_r + dat$on_updrs_3_5_r + dat$on_updrs_3_6_r + dat$on_updrs_3_7_r + dat$on_updrs_3_8_r + dat$on_updrs_3_15_r + dat$on_updrs_3_16_r + dat$on_updrs_3_17_rue + dat$on_updrs_3_17_rle 
+
+    
+
 
   # create vector of on UPDRS IV items to be scored
   on_updrs_4_colnames <- c("on_updrs_4_1", "on_updrs_4_2", "on_updrs_4_3",
@@ -55,6 +65,15 @@ scoreUPDRS <- function(dat) {
 
   # calculate total score of off UPDRS III; append to end of data frame
   dat[, "off_updrs_3_total"] <- apply(sub[,off_updrs_3_colnames],1,sum,na.rm=TRUE)
+
+   # calculate left and right hemispheric symptoms  
+dat$off_left_symptoms <- dat$off_updrs_3_4_l + dat$off_updrs_3_5_l +
+dat$off_updrs_3_6_l + dat$off_updrs_3_7_l + dat$off_updrs_3_8_l +
+dat$off_updrs_3_15_l + dat$off_updrs_3_16_l + dat$off_updrs_3_17_lue +
+dat$off_updrs_3_17_lle 
+
+dat$off_right_symptoms <- dat$off_updrs_3_4_r + dat$off_updrs_3_5_r + dat$off_updrs_3_6_r + dat$off_updrs_3_7_r + dat$off_updrs_3_8_r + dat$off_updrs_3_15_r + dat$off_updrs_3_16_r + dat$off_updrs_3_17_rue + dat$off_updrs_3_17_rle 
+
 
   # create vector of off UPDRS IV items to be scored
   off_updrs_4_colnames <- c("off_updrs_4_1", "off_updrs_4_2", "off_updrs_4_3",
