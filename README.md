@@ -19,14 +19,15 @@ For more information, see REDCap's documentation of API tokens: https://redcap.i
 
 
 ## Loading the library functions
-See this very helpful tutorial on creating an R library. https://hilaryparker.com/2014/04/29/writing-an-r-package-from-scratch/
 
-You should probably have packages `devtools` and `roxygen2` installed to work with this package. From the parent working directory that contains the UdallR folder, you should do the following:
+From the parent working directory that contains the UdallR folder, you should do the following:
 
 ```R
-setwd("..")
-install("UdallR")
+install.packages("UdallR", repos=NULL, type="source")
+library(UdallR)
 ```
+Note that if you try to use the `install` function from the `devtools`
+package you will get an error. Install as above.
 
 ## Using the library functions
 You would use them using code that looks something like this, where you substitute your REDCap token where it says `INSERTTOKENHERE`. Don't commit this token to github. 
