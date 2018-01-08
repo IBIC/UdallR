@@ -100,7 +100,7 @@ udallCleanREDCapDataWide <- function(dat, visit = 1) {
   # closest.colnames <- as.character(Codebook_PaNUC_2017_07_07$Stata_Variable_Name)
 
 
-  closest.colnames <- tolower(colnames(panuc_multivis_2017_10_26))
+  closest.colnames <- tolower(colnames(panuc_multivis_2017_12_16))
   closest.colnames <- closest.colnames[closest.colnames != ""]
   closest.colnames <- c("idnum",
                         closest.colnames[closest.colnames %in% colnames(dat)])
@@ -206,6 +206,13 @@ udallCleanREDCapDataWide <- function(dat, visit = 1) {
 
   # score SAI
   merged <- scoreSAI(merged)
+
+  # Calculate sway
+  dtcost <- udallCalculateCost(merged, grep("_st_", colnames(merged),
+                                            value = TRUE),
+                                       grep("_dt_", colnames(merged),
+                                            value = TRUE))
+  merged <- cbind(merged, dtcost)
 
 
   # TODO:

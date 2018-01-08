@@ -4,15 +4,20 @@
 \alias{udallCalculateCost}
 \title{Calculate task cost for gait and balance}
 \usage{
-udallCalculateCost(single.task, dual.task)
+udallCalculateCost(data.frame, st.cols, dt.cols)
 }
 \arguments{
-\item{single.task}{Data from single task run, as a data frame.}
+\item{data.frame}{Data frame that contains both the single task and dual
+task cost columsn.}
 
-\item{dual.task}{Data from dual task run, as a data.frame}
+\item{st.cols}{Which columns have information on single-task performance.}
+
+\item{dt.cols}{Which columns have information on dual-task performance.
+Length must match st.cols.}
 }
 \value{
-Cost for all measures over all subjects
+Data frame with #cols = length of st.cols and
+nrows = nrows(data.frame). Cost measurements for
 }
 \description{
 Calculate task cost for gait and balance
