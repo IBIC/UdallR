@@ -37,7 +37,10 @@ udallCalculateCost <- function(data.frame, st.cols, dt.cols)
       output[, n] <- NA
   }
 
-  return(output)
+  # Remove all-NA columns (e.g. columns that were originally not numeric.)
+  output.clean <- output[, colSums(is.na(output)) != nrow(output)]
+
+  return(output.clean)
 }
 
 # udallCalculateCost <- function(single.task, dual.task)
