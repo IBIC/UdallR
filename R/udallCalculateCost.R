@@ -41,7 +41,8 @@ udallCalculateCost <- function(data.frame, st.cols, dt.cols)
   output.clean <- output[, colSums(is.na(output)) != nrow(output)]
 
   # Remove irrelevant columns that have session, group info (stored elsewhere)
-  output.drop <- output.clean[, grep("dtcost_(session|group)", colnames(cdat),
+  output.drop <- output.clean[, grep("dtcost_(session|group)",
+                                     colnames(output.clean),
                                      invert = TRUE)]
 
   return(output.drop)
