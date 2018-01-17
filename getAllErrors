@@ -1,7 +1,7 @@
 #!/bin/bash
 
 today=$(date +'%Y%m%d')
-out=all-errors-${today}.txt
+out=all-errors/all-errors-${today}.txt
 
 if [ -a ${out} ]
 then

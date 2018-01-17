@@ -1,4 +1,4 @@
-#!/usr/local/bin/Rscript
+#!/usr/bin/Rscript
 
 # Load libraries required to download from REDCap and install custom packages.
 # This loop installs missing pacakges.

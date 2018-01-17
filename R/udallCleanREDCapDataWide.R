@@ -56,7 +56,6 @@ udallCleanREDCapDataWide <- function(dat, visit = 1) {
   # Arm 3, which has the closests visit that has been reuploaded to REDCap
   closest.visit <- subset(dat, redcap_event_name == "visit_for_mri_1_arm_3")
 
-
   # just throw in some assertions
   stopifnot(dim(on)[1] >= dim(off)[1])
 

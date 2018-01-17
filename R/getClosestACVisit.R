@@ -51,7 +51,7 @@ getClosestACVisit <- function(dat, multivis.df = NULL, multivis.file = NULL,
   closest.visit <- as.data.frame(t(apply(X = dat, MARGIN = 1,
                                          FUN = UdallR::getNearestRow,
                                          multivis = multivis.dat)))
-  colnames(closest.visit) <- colnames(multivis.dat)
+  colnames(closest.visit) <- tolower(colnames(multivis.dat))
 
   # df ends up factors by default, convert to character.
   closest.visit <- data.frame(lapply(closest.visit, as.character),

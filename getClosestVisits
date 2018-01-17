@@ -1,4 +1,4 @@
-#!/usr/local/bin/Rscript
+#!/usr/bin/Rscript
 
 # Load libraries required to download from REDCap and install custom packages.
 # This loop installs missing pacakges.
@@ -38,19 +38,19 @@ cdat <- udallCleanREDCapDataWide(dat, visit = 1)
 # Get the closest visits, comparing to the most recent multivis
 ## UPDATE THIS LINE WHEN NECESSARY
 closest.visits  <- getClosestACVisit(cdat,
-                                     multivis.df = panuc_multivis_2017_10_26)
+                                     multivis.df = panuc_multivis_2017_12_16)
 
-# # Get the numeric id from the PWAXX-XXXX string
+# Get the numeric id from the PWAXX-XXXX string
 idnum <- gsub("[^0-9]", "", closest.visits$summary_id)
 
-# # Add arm name for upload
+# Add arm name for upload
 redcap_event_name <- "visit_for_mri_1_arm_3"
 
-# # The columns for upload are just those that are present in both data frames
+# The columns for upload are just those that are present in both data frames
 cols.for.upload <- colnames(closest.visits) %in% colnames(cdat)
 closest.visits <- closest.visits[, cols.for.upload]
 
-# # Add the idnum and event name first (REDCap is particular)
+# Add the idnum and event name first (REDCap is particular)
 out <- cbind(idnum, redcap_event_name, closest.visits)
 # dim(closest.visits)
 
