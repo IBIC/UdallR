@@ -25,7 +25,7 @@ udallCalculateCost <- function(data.frame, st.cols, dt.cols)
     stop("Sing/dual task name mismatch.")
   }
 
-  # Create data farme with DT - ST values
+  # Create data frame with DT - ST values
   output <- as.data.frame(matrix(NA, nrow = nrow(data.frame),
                                  ncol = length(st.cols)))
   colnames(output) <- gsub("_st_", "_dtcost_", st.cols)
