@@ -2,7 +2,8 @@
 % Please edit documentation in R/scoreUPDRS.R
 \name{scoreUPDRS}
 \alias{scoreUPDRS}
-\title{scoreUPDRS; Modifies original data.frame by appending total UPDRS columns for UPDRS Part 3 & 4.}
+\title{scoreUPDRS; Modifies original data.frame by appending total UPDRS columns for
+ UPDRS Part 3 & 4.}
 \usage{
 scoreUPDRS(dat)
 }
@@ -13,5 +14,6 @@ scoreUPDRS(dat)
 dat Output data frame with items scored.
 }
 \description{
-scoreUPDRS; Modifies original data.frame by appending total UPDRS columns for UPDRS Part 3 & 4.
+scoreUPDRS; Modifies original data.frame by appending total UPDRS columns for
+ UPDRS Part 3 & 4.
 }

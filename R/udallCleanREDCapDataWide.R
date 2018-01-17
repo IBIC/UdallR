@@ -90,8 +90,8 @@ udallCleanREDCapDataWide <- function(dat, visit = 1) {
                 "ant_orienting_correct", "ant_conflict_correct",
                 "ant_conflict_all")
 
-  genetic.colnames <- c("idnum", "apoe", "apoe4", "gbastatus", "gba",
-                        "genetic_data_complete")
+  genetic.colnames <- c("idnum", "redcap_apoe", "redcap_apoe4", "redcap_gba",
+                        "redcap_gbacarrier", "genetic_data_complete")
 
   dx.colnames <- grep("dx", colnames(dat))
 

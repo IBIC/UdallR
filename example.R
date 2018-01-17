@@ -71,8 +71,8 @@ gnb <- udallProcessGnB("~/UdallR/data/gaitbalance-170912.xlsx",
                        write = "~/UdallR")
 
 # Calcuate task cost measures for sway and gait tasks.
-sway.cost <- udallCalculateCost(gnb$ST_Sway, gnb$DT_Sway)
-gait.cost <- udallCalculateCost(gnb$ST_Gait, gnb$DT_Gait)
+# sway.cost <- udallCalculateCost(gnb$ST_Sway, gnb$DT_Sway)
+# gait.cost <- udallCalculateCost(gnb$ST_Gait, gnb$DT_Gait)
 
 # Get list of analyzeable subjects
 controls <- cdat[cdat$group == "control", ]
@@ -94,3 +94,9 @@ write.table(axcpt.pd.off, file = "axcpt-pd-off.txt", row.names = FALSE,
             col.names = FALSE)
 write.table(axcpt.pd.both, file = "axcpt-pd-both.txt", row.names = FALSE,
             col.names = FALSE)
+
+### Some plots
+
+ggplot(subset(cdat, cdat$handedness < 3),
+       aes(x = on_RminusL_symptoms, fill = as.factor(handedness))) +
+  geom_density()
