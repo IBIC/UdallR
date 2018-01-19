@@ -1,10 +1,18 @@
 Package: UdallR
-Title: What the Package Does (one line, title case)
-Version: 0.0.0.9000
-Authors@R: person("First", "Last", email = "first.last@example.com", role = c("aut", "cre"))
-Description: What the package does (one paragraph).
+Title: R Interface with Udall REDCap Database
+Version: 0.3.0.0000
+Authors@R: c(person("Tara", "Madhyastha", email = "madhyt@uw.edu",
+                        role = c("aut", "cre")),
+             person("Trevor", middle = "K.M.", "Day", email = "tkmday@uw.edu",
+                        role = "aut"))
+Description: UdallR downloads data from the Udall REDCap database and
+    reorganizes it into a readable format, as well as calculating
+    certain varaibles from information available on REDCap. Requires
+    R 3.1.3 or newer.
 Depends:
-    R (>= 3.1.3)
+    R (>= 3.1.3),
+    data.table,
+    readxl
 License: What license is it under?
 LazyData: true
 RoxygenNote: 6.0.1
