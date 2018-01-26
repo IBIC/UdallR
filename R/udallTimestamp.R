@@ -9,7 +9,7 @@
 
 udallTimestamp <- function()
 {
-  version = 0.3.0.0000
+  version = "0.3.0.0000"
   date = "01/19/18"
 
   result <- as.data.frame(cbind(version,date))
