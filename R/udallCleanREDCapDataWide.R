@@ -39,19 +39,9 @@ udallCleanREDCapDataWide <- function(dat, visit = 1) {
   beh <- subset(dat, redcap_event_name == paste0("behavioral_", arm))
   genetic <- subset(dat, redcap_event_name == "genetic_data_arm_5")
 
-  analyze <- subset(dat, redcap_event_name == "study_inclusion_arm_4")
-  analyze <- analyze[, c("idnum", "include")]
-  analyze$include <- as.logical(analyze$include)
-
-  # Analyze column is the same either way
-  # analyze.on <- on[, c("idnum", "analyze_all", "analyze_axcpt_fmri",
-  #                        "analyze_rest_fmri", "analyze_behavior")]
-  # analyze.off <- off[, c("idnum", "analyze_axcpt_fmri",
-  #                      "analyze_rest_fmri", "analyze_behavior")]
-  #
-  # analyze <- merge(analyze.on, analyze.off, by = "idnum",
-  #                  suffixes = c(".on", ".off"))
-
+  include <- subset(dat, redcap_event_name == "study_inclusion_arm_4")
+  include <- include[, c("idnum", "include")]
+  include$include <- as.logical(include$include)
 
   # Arm 3, which has the closests visit that has been reuploaded to REDCap
   closest.visit <- subset(dat, redcap_event_name == "visit_for_mri_1_arm_3")
@@ -131,7 +121,12 @@ udallCleanREDCapDataWide <- function(dat, visit = 1) {
   # This is a crude check on that! If you get this kind of problem, go back to the database and figure out what records you've added incorrectly.
   merged <- merge(on, off, by = "idnum", all.x = TRUE, all.y = TRUE)
 
-  merged <- merge(merged, analyze, by = "idnum")
+  # Merged data with inclusion status
+  merged <- merge(merged, include, by = "idnum", all.x = TRUE, all.y = TRUE)
+
+  # Include by default people with no inclusion status (it's most likely they're
+  # OK, just haven't been processed yet.)
+  merged$include[is.na(merged$include)] <- TRUE
 
   if (sum(!merged$include) > 0)
   {
@@ -153,7 +148,7 @@ udallCleanREDCapDataWide <- function(dat, visit = 1) {
   stopifnot(n == dim(merged)[1])
 
   # merge in the analysis flag
-  # merged <- merge(merged, analyze, by = "idnum", all.x = TRUE)
+  # merged <- merge(merged, include, by = "idnum", all.x = TRUE)
   # stopifnot(n == dim(merged)[1])
 
   # merge in clinical core visit
