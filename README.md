@@ -40,7 +40,9 @@ dat <- as.data.frame(redcap_read(redcap_uri="https://redcap.iths.org/api/", toke
 cdat <- udallCleanREDCapDataWide(dat)
 ```
 
-## A guide to calculated variables
+## A guide to variables
+
+### Calculated variables
 
 The program `udallCleanREDCapDataWide` calculates or converts a number of measures from the REDCap data automatically. H1re is a summary:
 
@@ -62,6 +64,17 @@ The program `udallCleanREDCapDataWide` calculates or converts a number of measur
     * As there are 203 numeric measurements (plus the completeness value, discussed below) in that range, it wouldn't do to summarize them all here.
     * Note that `{on,off}_{st,dt}_{gait,sway}_complete` are originally numeric (0 = incomplete, 1 = unverified, 2 = complete), and so the variables `{on,off}_dtcost_{gait,sway}_complete` are automatically calculated. Any non-zero value here means either original completeness measure is incomplete or unverified. 
 
+### Genetic variables
+
+The genetic variables are a bit of a mess for a few reasons, including the fact that data overlaps with the "closest visits data." The goal with these variables is that the variables beginning `redcap_` don't need to be accessed by the end user - rather, `apoe` and `gbastatus` should be the only variables you need to do analyses.
+
++ `redcap_apoe`     This is the redcap entry as a factor [1-7]. Don't use it.
++ `redcap_apoe4`    Are they an APOE4 carrier? 0 = no; 1 = yes.
++ `apoe`            This is `redcap_apoe` turned from an inscrutable factor to a string representing genotype (e.g. "2/3").
++ `redcap_gba`      Factor representing screening scatus (Carrier, Non-Carrier, Not Screened)
++ `redcap_gbacarrier` Are they a GBA carrier (0 = no; 1 = yes)
++ `gbastatus`       Screening status as a string (e.g. "Non-Carrier")
+ 
 ## Important notes
 
 A few important notes regarding `UdallR` and its presence on GitHub.
