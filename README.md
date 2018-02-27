@@ -79,5 +79,6 @@ The genetic variables are a bit of a mess for a few reasons, including the fact 
 
 A few important notes regarding `UdallR` and its presence on GitHub.
 
++ In order for a subject to be identified as ready to process with `UdallR`, they need to have the `on_mri_dob` date-of-birth variable entered. **This is the variable in the *scan log* form, not the demographic form.**
 + Make sure not to commit your REDCap API key to GitHub, your key is for you and you only. See `example.R` for an example of how to save your key locally and avoid uploading it to GitHub.
 + Do not distribute this repo. The `data/` directory has data files (`.rda` extensions) that contain sensitive and protected information.
