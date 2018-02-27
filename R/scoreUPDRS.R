@@ -99,6 +99,15 @@ scoreUPDRS <- function(dat) {
   on_RminusL_symptoms <- on_right_symptoms - on_left_symptoms
   off_RminusL_symptoms <- off_right_symptoms - off_left_symptoms
 
+
+  # Fix Hoehn & Yahr stage
+  for (status in c("off_updrs_3_hoehn_yahr", "on_updrs_3_hoehn_yahr"))
+  {
+    # Anything >5 is an error code
+    dat[, status] <- ifelse(dat[, status] > 5, NA, dat[, status])
+  }
+
+
   # Add calculated values to result data frame for returning it
   result <- cbind(dat, on_updrs_3_total, on_updrs_4_total, on_left_symptoms,
                           on_right_symptoms, on_RminusL_symptoms,

@@ -30,7 +30,6 @@ udallCleanREDCapDataWide <- function(dat, visit = 1) {
   newnames <- gsub("^data.", "", names)
   colnames(dat) <- newnames
 
-
   # Select the on/off/behavioral columns depending on which visit.
   arm <- paste0("arm_", visit)
 
@@ -178,7 +177,6 @@ udallCleanREDCapDataWide <- function(dat, visit = 1) {
   levels(merged$group) <- c("pd", "control")
 
 
-  merged <- udallReplaceMissing(merged)
 
   merged$dx_dominant_side <- as.factor(merged$dx_dominant_side)
   levels(merged$dx_dominant_side) <- c("left", "right")
@@ -191,6 +189,8 @@ udallCleanREDCapDataWide <- function(dat, visit = 1) {
 
   # score UPDRS total
   merged <- scoreUPDRS(merged)
+
+  merged <- udallReplaceMissing(merged)
 
   # education - right now coming from health/demo
   merged$educ <- merged$on_health_demo_years_educ
