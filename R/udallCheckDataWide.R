@@ -216,6 +216,11 @@ udallCheckDataWide <- function(dat, error.file) {
              "Indicated FOG; but total score is NA", variable = "on_fog_q1",
              error.file)
 
+    logError(dat,
+             dat$led < 100 & is.pd,
+             "Levadopa-equivalent dose is < 100", variable = "led",
+             warning = TRUE, error.file)
+
     ## TODO:
     # ADD TO udallCheckDataWideTest.R
 
