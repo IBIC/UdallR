@@ -14,6 +14,13 @@ scoreUPDRS <- function(dat) {
   ## missing data coded as pull downs for updrs part 3
   dat <- udallReplaceMissing(dat)
 
+  # Fix Hoehn & Yahr stage
+  dat$off_uprds_3_hoehn_yahr <- ifelse(dat$off_updrs_3_hoehn_yahr > 5,
+                                       NA, dat$off_updrs_3_hoehn_yahr)
+  dat$on_uprds_3_hoehn_yahr <- ifelse(dat$on_updrs_3_hoehn_yahr > 5,
+                                       NA, dat$on_updrs_3_hoehn_yahr)
+
+
   #### On UPDRS Part III
   # create vector of UPDRS III items to be scored
   on_updrs_3_colnames <- paste0("on_updrs_", c("3_1", "3_2",
@@ -98,15 +105,6 @@ scoreUPDRS <- function(dat) {
   # Calculate laterality scores
   on_RminusL_symptoms <- on_right_symptoms - on_left_symptoms
   off_RminusL_symptoms <- off_right_symptoms - off_left_symptoms
-
-
-  # Fix Hoehn & Yahr stage
-  for (status in c("off_updrs_3_hoehn_yahr", "on_updrs_3_hoehn_yahr"))
-  {
-    # Anything >5 is an error code
-    dat[, status] <- ifelse(dat[, status] > 5, NA, dat[, status])
-  }
-
 
   # Add calculated values to result data frame for returning it
   result <- cbind(dat, on_updrs_3_total, on_updrs_4_total, on_left_symptoms,
