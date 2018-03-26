@@ -176,7 +176,22 @@ udallCleanREDCapDataWide <- function(dat, visit = 1) {
   # PD is 1, control is 2
   levels(merged$group) <- c("pd", "control")
 
+  # Replace why columns with strings
+  fmri.reasons <- c("Motion", "Did not understand task", "Sleep", "Recon error",
+                    "Poor performance", "Excluded", "Other", "Behavior issues")
+  for (variable in c("on_analyze_axcpt_fmri_why", "off_analyze_axcpt_fmri_why",
+                     "on_analyze_rest_fmri_why", "off_analyze_rest_fmri_why"))
+  {
+    merged[, variable] <- fmri.reasons[merged[, variable]]
+  }
 
+  behavioral.reasons <- c("Did not understand task", "Sleep", "Other")
+  merged$on_analyze_behavior_why <- behavioral.reasons[merged$on_analyze_behavior_why]
+  merged$off_analyze_behavior_why <- behavioral.reasons[merged$off_analyze_behavior_why]
+
+  # Add DTI when it shows up in the data
+
+  # Add SAI when analyze_sai_why is converted from a text entry box to a factor
 
   merged$dx_dominant_side <- as.factor(merged$dx_dominant_side)
   levels(merged$dx_dominant_side) <- c("left", "right")
