@@ -2,5 +2,6 @@
 .Rhistory
 .RData
 data/panuc_multivis_*.csv
-data/*.rda
 README.html
+udall-SG-*.csv
+upload-*.csv
