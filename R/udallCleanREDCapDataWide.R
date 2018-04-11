@@ -177,21 +177,15 @@ udallCleanREDCapDataWide <- function(dat, visit = 1) {
   levels(merged$group) <- c("pd", "control")
 
   # Replace why columns with strings
-  fmri.reasons <- c("Motion", "Did not understand task", "Sleep", "Recon error",
-                    "Poor performance", "Excluded", "Other", "Behavior issues")
-  for (variable in c("on_analyze_axcpt_fmri_why", "off_analyze_axcpt_fmri_why",
-                     "on_analyze_rest_fmri_why", "off_analyze_rest_fmri_why"))
+  reasons <- c("Other", "Excessive motion", "Could not understand task",
+               "Fell asleep", "Equipment issues", "Poor performance, non-sleep",
+               "Subject excluded", "Behavior")
+  for (variable in grep("^o.*_analyze_.*_why$", colnames(merged)))
   {
-    merged[, variable] <- fmri.reasons[merged[, variable]]
+    # So, the REDCAP values are on the range [0,7], where 0 is the "other" value
+    # R is 1-indexed, so increment by one so they line up.
+    merged[, variable] <- reasons[merged[, variable] + 1]
   }
-
-  behavioral.reasons <- c("Did not understand task", "Sleep", "Other")
-  merged$on_analyze_behavior_why <- behavioral.reasons[merged$on_analyze_behavior_why]
-  merged$off_analyze_behavior_why <- behavioral.reasons[merged$off_analyze_behavior_why]
-
-  # Add DTI when it shows up in the data
-
-  # Add SAI when analyze_sai_why is converted from a text entry box to a factor
 
   merged$dx_dominant_side <- as.factor(merged$dx_dominant_side)
   levels(merged$dx_dominant_side) <- c("left", "right")
