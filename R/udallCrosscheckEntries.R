@@ -80,32 +80,43 @@ udallCrosscheckEntries <- function(cdat, error.file)
            "patient UPDRS OFF in REDCap is NA", variable = "off_updrs_3_total",
            error.file)
 
-  logError(cdat, is.na(cdat$updrs_new_3_total_m1),
-           "closest UPDRS ON is NA", variable = "updrs_new_3_total_m1",
-           error.file)
+  # UPRDS _m1 variables renamed in late May: this script should be reviewed
+  # for changing variable names.
 
-  logError(cdat,
-           is.na(cdat$updrs_new_3_total_m2) & cdat$group == "pd",
-           "patient closest UPDRS OFF is NA",
-           variable = "updrs_new_3_total_m2", error.file)
+  # logError(cdat, is.na(cdat$updrs_new_3_total_m1),
+  #          "closest UPDRS ON is NA", variable = "updrs_new_3_total_m1",
+  #          error.file)
 
-  on.mismatches <- !sapply(cdat$on_updrs_3_total ==
-                             cdat$updrs_new_3_total_m1,
-                           isTRUE)
+  # logError(cdat,
+  #          is.na(cdat$updrs_new_3_total_m2) & cdat$group == "pd",
+  #          "patient closest UPDRS OFF is NA",
+  #          variable = "updrs_new_3_total_m2", error.file)
+  #
+  # on.mismatches <- !sapply(cdat$on_updrs_3_total ==
+  #                            cdat$updrs_new_3_total_m1,
+  #                          isTRUE)
 
-  logError(cdat, on.mismatches,
-           paste0("UPDRS ON mismatch:", cdat$on_updrs_3_total, "/",
-                  cdat$updrs_new_3_total_m1),
-           variable = "on_updrs_3_total,updrs_new_3_total_m1",
-           error.file)
+  # logError(cdat, on.mismatches,
+  #          paste0("UPDRS ON mismatch:", cdat$on_updrs_3_total, "/",
+  #                 cdat$updrs_new_3_total_m1),
+  #          variable = "on_updrs_3_total,updrs_new_3_total_m1",
+  #          error.file)
+  #
+  # off.mismatches <- !sapply(cdat$off_updrs_3_total ==
+  #                             cdat$updrs_new_3_total_m2,
+  #                           isTRUE) & cdat$group == "pd"
 
-  off.mismatches <- !sapply(cdat$off_updrs_3_total ==
-                              cdat$updrs_new_3_total_m2,
-                            isTRUE) & cdat$group == "pd"
+  # logError(cdat, off.mismatches,
+  #          paste0("patient UPDRS OFF mismatch:", cdat$off_updrs_3_total, "/",
+  #                 cdat$updrs_new_3_total_m2),
+  #          variable = "off_updrs_3_total,updrs_new_3_total_m2",
+  #          error.file)
 
-  logError(cdat, off.mismatches,
-           paste0("patient UPDRS OFF mismatch:", cdat$off_updrs_3_total, "/",
-                  cdat$updrs_new_3_total_m2),
-           variable = "off_updrs_3_total,updrs_new_3_total_m2",
-  error.file)
+  # Report if scage.ddays is not 0 or NA, this means that there are different
+  # ages calculated for ON/OFF scans.
+  non.zero.ddays <- ifelse(is.na(cdat$scage.ddays), 0, cdat$scage.ddays) != 0
+  logError(cdat, non.zero.ddays,
+           paste("Difference in ON/OFF scan ages:",
+                  signif(cdat$scage.ddays, 3), "days"),
+           variable = "scage.ddays", error.file)
 }

@@ -16,7 +16,11 @@ getNearestRow <- function(x, multivis)
   age <- as.numeric(unlist(unname(x["scage"])))
 
   # csv stores IDs in the format PWA00-0000, input is 000000
-  new.id <- paste0("PWA", substr(ID, 1, 2), "-", substr(ID, 3, 6))
+  # new.id <- paste0("PWA", substr(ID, 1, 2), "-", substr(ID, 3, 6))
+
+  # We now have PST- prefix subjects, so get the summary_id from the x (from
+  # cdat) instead of assuming they're PWA- subjects
+  new.id <- unlist(unname(x["summary_id"]))
 
   # Row for when there's errors
   na.row <- rep(NA, ncol(multivis))

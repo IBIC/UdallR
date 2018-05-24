@@ -22,6 +22,8 @@
 #'
 udallCleanREDCapDataWide <- function(dat, visit = 1) {
 
+  days2year <- 365.25
+
   if (!is.numeric(visit) | ! visit %in% 1:2)
     stop(paste(visit, "is not a valid visit ID. Choose 1 or 2."))
 
@@ -204,8 +206,16 @@ udallCleanREDCapDataWide <- function(dat, visit = 1) {
   # education - right now coming from health/demo
   merged$educ <- merged$on_health_demo_years_educ
 
-  # compute scan age in years
-  merged$scage <- as.numeric((as.Date(merged$on_mri_date) - as.Date(merged$on_mri_dob))/365)
+  # Calculate the ON/OFF scan ages. OFF will be NA for controls, so scage is
+  # just set to the ON score. If they differ for controls, set it to the mean.
+  # The % error for 80 year old people is <1%.
+  merged$scage.on <- as.integer(difftime(as.Date(merged$on_mri_date),
+                                          as.Date(merged$on_mri_dob))) / days2year
+  merged$scage.off <- as.integer(difftime(as.Date(merged$off_mri_date),
+                                            as.Date(merged$off_mri_dob))) / days2year
+  merged$scage <- apply(merged[, c("scage.on", "scage.off")], 1,
+                        mean, na.rm = TRUE)
+  merged$scage.ddays <- (merged$scage.on - merged$scage.off) * days2year
 
   # score SAI
   merged <- scoreSAI(merged)

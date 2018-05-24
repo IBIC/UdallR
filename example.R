@@ -32,6 +32,9 @@ dat <- as.data.frame(redcap_read(redcap_uri = "https://redcap.iths.org/api/",
 # The visit variable doesn't do much right now.
 cdat <- udallCleanREDCapDataWide(dat, visit = 1)
 
+# Get a table with which data can be analyzed for which participants
+analyzing <- udallGetAnalyze(cdat)
+
 # Test the UdallR data-checking function
 checked <- udallCheckDataWide(cdat, error.file = "REDCap-errors.txt")
 
