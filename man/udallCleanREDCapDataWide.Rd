@@ -4,7 +4,7 @@
 \alias{udallCleanREDCapDataWide}
 \title{Clean up the data that come from Udall REDCap database}
 \usage{
-udallCleanREDCapDataWide(dat, visit = 1)
+udallCleanREDCapDataWide(dat, visit = 1, drop.excluded = TRUE)
 }
 \arguments{
 \item{dat}{Data frame that comes directly from redcap_read.}

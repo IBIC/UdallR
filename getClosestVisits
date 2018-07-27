@@ -33,7 +33,7 @@ dat <- as.data.frame(redcap_read(redcap_uri = "https://redcap.iths.org/api/",
 
 # Test the UdallR cleaning function
 # The visit variable doesn't do much right now.
-cdat <- udallCleanREDCapDataWide(dat, visit = 1)
+cdat <- udallCleanREDCapDataWide(dat, visit = 1, drop.excluded = FALSE)
 
 # Get the closest visits, comparing to the most recent multivis
 ## UPDATE THIS LINE WHEN NECESSARY

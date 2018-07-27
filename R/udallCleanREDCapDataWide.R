@@ -20,7 +20,7 @@
 #'
 #' @export
 #'
-udallCleanREDCapDataWide <- function(dat, visit = 1) {
+udallCleanREDCapDataWide <- function(dat, visit = 1, drop.excluded = TRUE) {
 
   days2year <- 365.25
 
@@ -129,14 +129,15 @@ udallCleanREDCapDataWide <- function(dat, visit = 1) {
   # OK, just haven't been processed yet.)
   merged$include[is.na(merged$include)] <- TRUE
 
-  if (sum(!merged$include) > 0)
-  {
-    message(paste("Dropping", sum(!merged$include),
-                  "subjects from whole study: ",
-                  paste(merged$idnum[!merged$include], collapse = " ")))
+  if (drop.excluded)
+    if (sum(!merged$include) > 0)
+    {
+      message(paste("Dropping", sum(!merged$include),
+                    "subjects from whole study: ",
+                    paste(merged$idnum[!merged$include], collapse = " ")))
 
-    merged <- merged[merged$include, ]
-  }
+      merged <- merged[merged$include, ]
+    }
 
   n <- dim(merged)[1]
 
@@ -190,7 +191,7 @@ udallCleanREDCapDataWide <- function(dat, visit = 1) {
   }
 
   merged$dx_dominant_side <- as.factor(merged$dx_dominant_side)
-  levels(merged$dx_dominant_side) <- c("left", "right")
+  levels(merged$dx_dominant_side) <- c("left", "right", "symmetricl")
 
   # score various assessments
   merged <- scoreFOG(merged)
