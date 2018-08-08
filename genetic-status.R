@@ -8,10 +8,18 @@ if (!require("optparse")) install.packages("optparse")
 library(optparse)
 
 option_list = list(
+
+  # Should we report for all subjects?
   make_option(c("-a", "--all"), action = "store_true", dest = "all",
               default = FALSE, help = "Include excluded subjects."),
+
+  # Compare against another date?
   make_option(c("-d", "--date"), type = "character", default = Sys.Date(),
-              help = "What day to compare against, default = today")
+              help = "What day to compare against, default = today"),
+
+  # Display table at end?
+  make_option(c("-v", "--verbose"), action = "store_true", dest = "verbose",
+              default = FALSE, help = "Display full table")
 );
 
 opt_parser = OptionParser(option_list = option_list);
@@ -82,6 +90,7 @@ message(paste("After checking,", as.character(sum(is.na(short$is.apoe))),
 # Is the subject an GBA carrier?
 # First, get the values from the apoe (the actual value) field
 short$is.gba <- !grepl("Non", short$gbastatus)
+short$is.gba[is.na(short$gbastatus)] <- NA
 # If it's still NA, then use the redcap_apoe4 field
 short$is.gba[is.na(short$is.gba)] <- as.logical(short$redcap_gbacarrier[is.na(short$is.gba)])
 message(paste("After checking,", as.character(sum(is.na(short$is.gba))),
@@ -165,3 +174,5 @@ if (sum(is.na(con.gbacarrier)) > 0)
 message(paste("No GBA status (C):\t",
               paste(con$idnum[is.na(con.gbacarrier)], collapse = " ")))
 
+if (opt$verbose)
+  print(short)
