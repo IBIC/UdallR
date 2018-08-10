@@ -1,7 +1,23 @@
 #!/bin/bash
 
 projecthome=~/UdallR
+
+while getopts ":f" opt ; do
+    case ${opt} in
+        f)
+            echo "Will overwrite multivis"
+            shift 1
+            FORCE=yes ;;
+        \?)
+            echo "Invalid option: -${OPTARG}" ;;
+    esac
+done
+
 newdate=${1}
+
+if [[ ${FORCE} == "yes" ]] ; then
+    rm -f ${projecthome}/data/panuc_multivis_20${newdate}.rda
+fi
 
 # Check input for correct format
 if [[ ! ${newdate} =~ ^([0-9]{2}_){2}[0-9]{2}$ ]] ; then
