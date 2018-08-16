@@ -10,6 +10,10 @@ if (!dir.exists(dir))
 
 # Read input files
 files <- list.files(dir, pattern = "panuc-0110-.*.csv", full.names = TRUE)
+
+if (length(files) != 2)
+  stop(paste0("There must be two and only two CSV files in data/", dir))
+
 updrs <- read.csv(files[1])
 main  <- read.csv(files[2])
 
