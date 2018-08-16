@@ -3,7 +3,7 @@
 
 # setwd("~")
 
-for (package in c("REDCapR", "devtools"))
+for (package in c("REDCapR", "devtools", "ggplot2"))
 {
   if (!require(package, character.only = TRUE))
   {
@@ -44,7 +44,7 @@ checked <- udallCheckDataWide(cdat, error.file = "REDCap-errors.txt")
 udallCrosscheckEntries(cdat, error.file = "mismatch-errors.txt")
 
 closest.visits <- getClosestACVisit(cdat,
-                                    multivis.df = panuc_multivis_2018_05_24)
+                                    multivis.df = panuc_multivis_2018_08_15)
 
 demographics <- c("agevisit", "education_years", "gender", "handedness")
 pd.symptoms <- c("hoehn_and_yahr_m0", "dx_dominant_side", "updrs_new_1_total",

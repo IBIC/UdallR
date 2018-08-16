@@ -11,7 +11,7 @@
 #' lazy-loaded panuc_multivis_*_* datasets). Mutually exclusive with
 #' multivis.file
 #' @param multivis.file CSV file to read multivis information from, if you need
-#' data other than the default (currently 20174/04/25).
+#' data other than the default
 #'
 #' @return closest.visit A data table with the information from the analytic
 #' center visit nearest to scan date.

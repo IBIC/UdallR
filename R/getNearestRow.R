@@ -20,7 +20,11 @@ getNearestRow <- function(x, multivis)
 
   # We now have {PST,PRE,JHU}- prefix subjects, so get the summary_id from the
   # x (from cdat) instead of assuming they're PWA- subjects
-  new.id <- unlist(unname(x["summary_id"]))
+  # new.id <- unlist(unname(x["summary_id"]))
+
+  # Account for any prefix out of: PWA, PRE, PST, JHU
+  dash.regex <- paste0("[PJ][WRSH][AETU]", substr(ID, 1, 2), "-",
+                       substr(ID, 3, 6))
 
   # Row for when there's errors
   na.row <- rep(NA, ncol(multivis))
@@ -36,7 +40,8 @@ getNearestRow <- function(x, multivis)
   }
 
   # Dates for subject
-  subj.subset <- multivis[multivis$subject_id == new.id, ]
+  # subj.subset <- multivis[multivis$subject_id == new.id, ]
+  subj.subset <- multivis[grep(dash.regex, multivis$subject_id), ]
 
   # Ages at different visits
   ages <- subj.subset$agevisit
@@ -53,7 +58,7 @@ getNearestRow <- function(x, multivis)
               " analytic site ages.")
     }
 
-    # Check whether any vists are within 6 months (= half a year)
+    # Check whether any vists are within 6 months
     if (all(dates.diff > 0.5, na.rm = TRUE))
     {
       warning(paste0(ID, " doesn't have any visits within ±6 months. ",
