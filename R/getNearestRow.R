@@ -11,20 +11,9 @@
 getNearestRow <- function(x, multivis)
 {
   # Parse input
-  # v <- as.vector(unlist(x))
-  ID <- unlist(unname(x["idnum"]))
+  ID.with.prefix <- unlist(unname(x["on_mri_subject_id"]))
+  ID <- gsub("[^0-9]", "", ID.with.prefix)
   age <- as.numeric(unlist(unname(x["scage"])))
-
-  # csv stores IDs in the format PWA00-0000, input is 000000
-  # new.id <- paste0("PWA", substr(ID, 1, 2), "-", substr(ID, 3, 6))
-
-  # We now have {PST,PRE,JHU}- prefix subjects, so get the summary_id from the
-  # x (from cdat) instead of assuming they're PWA- subjects
-  # new.id <- unlist(unname(x["summary_id"]))
-
-  # Account for any prefix out of: PWA, PRE, PST, JHU
-  dash.regex <- paste0("[PJ][WRSH][AETU]", substr(ID, 1, 2), "-",
-                       substr(ID, 3, 6))
 
   # Row for when there's errors
   na.row <- rep(NA, ncol(multivis))
@@ -34,14 +23,15 @@ getNearestRow <- function(x, multivis)
 
   if (is.na(age))
   {
-    warning(paste(ID, "has no visit age."))
+    warning(paste(ID.with.prefix, "has no visit age."))
 
     return(na.row)
   }
 
   # Dates for subject
   # subj.subset <- multivis[multivis$subject_id == new.id, ]
-  subj.subset <- multivis[grep(dash.regex, multivis$subject_id), ]
+  # subj.subset <- multivis[grep(dash.regex, multivis$subject_id), ]
+  subj.subset <- multivis[multivis$summary_id == ID.with.prefix, ]
 
   # Ages at different visits
   ages <- subj.subset$agevisit
@@ -62,7 +52,8 @@ getNearestRow <- function(x, multivis)
     # Check whether any vists are within 6 months
     if (all(dates.diff > 0.5, na.rm = TRUE))
     {
-      warning(paste0(ID, " doesn't have any visits within ±6 months. ",
+      warning(paste0(ID.with.prefix,
+                    " doesn't have any visits within ±6 months. ",
                     "Choosing nearest visit (",
                     round((ages - age)[closest] * 12, 3),
                     " months). "))
@@ -72,7 +63,8 @@ getNearestRow <- function(x, multivis)
     nearest.row <- subj.subset[which.min(dates.diff), ]
 
   } else {
-    warning(paste(ID, " has no valid ages to compare to. Returning NA row"))
+    warning(paste(ID.with.prefix,
+                  " has no valid ages to compare to. Returning NA row"))
 
     nearest.row <- na.row
   }

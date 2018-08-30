@@ -50,6 +50,8 @@ redcap_event_name <- "visit_for_mri_1_arm_3"
 cols.for.upload <- colnames(closest.visits) %in% colnames(cdat)
 closest.visits <- closest.visits[, cols.for.upload]
 
+message("We have the closest visits")
+
 # Add the idnum and event name first (REDCap is particular)
 out <- cbind(idnum, redcap_event_name, closest.visits)
 # dim(closest.visits)

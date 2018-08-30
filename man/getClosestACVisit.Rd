@@ -11,7 +11,7 @@ getClosestACVisit(dat, multivis.df = NULL, multivis.file = NULL,
 \item{dat}{Cleaned REDCap data}
 
 \item{multivis.file}{CSV file to read multivis information from, if you need
-data other than the default (currently 20174/04/25).}
+data other than the default}
 
 \item{file.name}{CSV file to save output to. Defaults to NULL. If none is
 given, returns data frame.}
