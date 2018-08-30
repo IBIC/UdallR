@@ -51,6 +51,7 @@ getNearestRow <- function(x, multivis)
   if (sum(is.na(ages)) < length(ages))
   {
     dates.diff <- abs(ages - age)
+    closest <- which.min(dates.diff)
 
     if (sum(is.na(subj.subset$agevisit)) > 0)
     {
@@ -63,7 +64,7 @@ getNearestRow <- function(x, multivis)
     {
       warning(paste0(ID, " doesn't have any visits within ±6 months. ",
                     "Choosing nearest visit (",
-                    round(min(dates.diff) * 12, 3),
+                    round((ages - age)[closest] * 12, 3),
                     " months). "))
     }
 
