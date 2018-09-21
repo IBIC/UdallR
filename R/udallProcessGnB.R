@@ -15,8 +15,10 @@
 
 
 udallProcessGnB <- function(xlsx, write = NA) {
+
   library(readxl)
-  today <- format(Sys.Date(), format = "%Y%m%d")
+
+  today <- format(Sys.Date(), format = "%Y-%m-%d")
 
   sheets <- c("ST_Sway", "DT_Sway", "ST_Gait", "DT_Gait")
 
