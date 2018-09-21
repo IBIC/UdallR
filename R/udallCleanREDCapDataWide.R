@@ -20,12 +20,20 @@
 #'
 #' @export
 #'
-udallCleanREDCapDataWide <- function(dat, visit = 1, drop.excluded = TRUE) {
+udallCleanREDCapDataWide <- function(dat, visit = 1, drop.excluded = TRUE,
+                                     keep.status.columns = FALSE,
+                                     return.calculated.columns = TRUE) {
 
   days2year <- 365.25
 
   if (!is.numeric(visit) | ! visit %in% 1:2)
     stop(paste(visit, "is not a valid visit ID. Choose 1 or 2."))
+
+  # The REDCap download function appends eight columns regarding the status of
+  # the download that we don't need. Keep them if the user wants, though
+  status.columns <- !grepl("^data", colnames(dat))
+  if (!keep.status.columns)
+    dat <- dat[, !status.columns]
 
   # remove the leading "data" from the names
   names <- colnames(dat)
@@ -90,7 +98,7 @@ udallCleanREDCapDataWide <- function(dat, visit = 1, drop.excluded = TRUE) {
   # closest.colnames <- as.character(Codebook_PaNUC_2017_07_07$Stata_Variable_Name)
 
 
-  closest.colnames <- tolower(colnames(panuc_multivis_2018_08_26))
+  closest.colnames <- tolower(colnames(panuc_multivis_2018_09_06))
   closest.colnames <- closest.colnames[closest.colnames != ""]
   closest.colnames <- c("idnum",
                         closest.colnames[closest.colnames %in% colnames(dat)])
@@ -200,7 +208,8 @@ udallCleanREDCapDataWide <- function(dat, visit = 1, drop.excluded = TRUE) {
   merged <- numericColumnsUPDRS(merged)
 
   # score UPDRS total
-  merged <- scoreUPDRS(merged)
+  if (return.calculated.columns)
+    merged <- scoreUPDRS(merged)
 
   merged <- udallReplaceMissing(merged)
 
@@ -222,11 +231,13 @@ udallCleanREDCapDataWide <- function(dat, visit = 1, drop.excluded = TRUE) {
   merged <- scoreSAI(merged)
 
   # Calculate sway
-  dtcost <- udallCalculateCost(merged, grep("_st_", colnames(merged),
-                                            value = TRUE),
-                                       grep("_dt_", colnames(merged),
-                                            value = TRUE))
-  merged <- cbind(merged, dtcost)
+  if (return.calculated.columns) {
+    dtcost <- udallCalculateCost(merged, grep("_st_", colnames(merged),
+                                              value = TRUE),
+                                         grep("_dt_", colnames(merged),
+                                              value = TRUE))
+    merged <- cbind(merged, dtcost)
+  }
 
 
   # TODO:
