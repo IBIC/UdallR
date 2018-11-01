@@ -98,7 +98,7 @@ udallCleanREDCapDataWide <- function(dat, visit = 1, drop.excluded = TRUE,
   # closest.colnames <- as.character(Codebook_PaNUC_2017_07_07$Stata_Variable_Name)
 
 
-  closest.colnames <- tolower(colnames(panuc_multivis_2018_09_06))
+  closest.colnames <- tolower(colnames(panuc_multivis_2018_10_10))
   closest.colnames <- closest.colnames[closest.colnames != ""]
   closest.colnames <- c("idnum",
                         closest.colnames[closest.colnames %in% colnames(dat)])
@@ -219,10 +219,12 @@ udallCleanREDCapDataWide <- function(dat, visit = 1, drop.excluded = TRUE,
   # Calculate the ON/OFF scan ages. OFF will be NA for controls, so scage is
   # just set to the ON score. If they differ for controls, set it to the mean.
   # The % error for 80 year old people is <1%.
-  merged$scage.on <- as.integer(difftime(as.Date(merged$on_mri_date),
-                                          as.Date(merged$on_mri_dob))) / days2year
-  merged$scage.off <- as.integer(difftime(as.Date(merged$off_mri_date),
-                                            as.Date(merged$off_mri_dob))) / days2year
+  on.dates <- as.Date(merged$on_mri_date, "%Y-%m-%d")
+  on.dob <- as.Date(merged$on_mri_dob, "%Y-%m-%d")
+  off.dates <- as.Date(merged$off_mri_date, "%Y-%m-%d")
+  off.dob <- as.Date(merged$off_mri_dob, "%Y-%m-%d")
+  merged$scage.on <- as.integer(difftime(on.dates, on.dob)) / days2year
+  merged$scage.off <- as.integer(difftime(off.dates, off.dob)) / days2year
   merged$scage <- apply(merged[, c("scage.on", "scage.off")], 1,
                         mean, na.rm = TRUE)
   merged$scage.ddays <- (merged$scage.on - merged$scage.off) * days2year
