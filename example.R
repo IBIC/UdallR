@@ -103,3 +103,43 @@ write.table(axcpt.pd.both, file = "axcpt-pd-both.txt", row.names = FALSE,
 ggplot(subset(cdat, cdat$handedness < 3),
        aes(x = on_RminusL_symptoms, fill = as.factor(handedness))) +
   geom_density()
+
+## PD
+
+exclude.PD <- pds[, c("idnum", "on_analyze_rest_fmri",
+                       "on_analyze_rest_fmri_why", "off_analyze_rest_fmri",
+                       "off_analyze_rest_fmri_why", "on_mri_me_rs_notes",
+                       "off_mri_me_rs_notes"), ]
+
+both.OK <- exclude.PD$on_analyze_rest_fmri & exclude.PD$off_analyze_rest_fmri
+OK <- exclude.PD[both.OK, ]
+
+excluded <- exclude.PD[!both.OK, ]
+
+# If they were excluded for motion in either scan, change the flag to OK
+on.excess.motion <- excluded$on_analyze_rest_fmri_why == "Excessive motion"
+excluded$on_analyze_rest_fmri[on.excess.motion] <- 1
+off.excess.motion <- excluded$off_analyze_rest_fmri_why == "Excessive motion"
+excluded$off_analyze_rest_fmri[off.excess.motion] <- 1
+
+# Subset out people who were excluded for motion
+secondary.OK <- excluded$on_analyze_rest_fmri == 1 & excluded$off_analyze_rest_fmri == 1
+OK2 <- excluded[secondary.OK, ]
+
+# Everyone who is OK or just had high motion
+OKmo <- rbind(OK, OK2)
+
+other.exclusions <- exclude.PD$idnum[!exclude.PD$idnum %in% OKmo$idnum]
+
+other <- exclude.PD[exclude.PD$idnum %in% other.exclusions, ]
+
+cat(OKmo$idnum, fill = TRUE)
+cat(other$idnum, fill = TRUE)
+
+out <- other
+out$on_mri_me_rs_notes <- gsub("\n", "; ", out$on_mri_me_rs_notes)
+out$off_mri_me_rs_notes <- gsub("\n", "; ", out$off_mri_me_rs_notes)
+out$on_mri_me_rs_notes <- gsub(",", " ", out$on_mri_me_rs_notes)
+out$off_mri_me_rs_notes <- gsub(",", " ", out$off_mri_me_rs_notes)
+
+write.csv(out, "exclusions-why.csv", quote = FALSE, row.names = FALSE)
