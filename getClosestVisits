@@ -38,7 +38,7 @@ cdat <- udallCleanREDCapDataWide(dat, visit = 1, drop.excluded = TRUE)
 # Get the closest visits, comparing to the most recent multivis
 ## UPDATE THIS LINE WHEN NECESSARY
 closest.visits  <- getClosestACVisit(cdat,
-                                     multivis.df = panuc_multivis_2018_10_10)
+                                     multivis.df = panuc_multivis_2018_10_26)
 
 # Get the numeric id from the PWAXX-XXXX string
 idnum <- gsub("[^0-9]", "", closest.visits$summary_id)
