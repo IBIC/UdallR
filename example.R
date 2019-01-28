@@ -24,8 +24,12 @@ rc.token <- readChar("~/UdallR/access-token.txt", nchars = 32)
 # Read the data from the REDCap API. "stringsAsFactors" stops R from treating
 ## important strings as factors (which when written to file, are written as the
 ## underlying numeric representation.
+## NEW Jan. 2019
+## The default batch_size is 100, and we're just barely above 100 now, so bump
+## it up so we only have to do one run.
+## Also, subset $data from dat before as.data.frame (old method still available)
 dat <- as.data.frame(redcap_read(redcap_uri = "https://redcap.iths.org/api/",
-                                    token = rc.token),
+                                 token = rc.token, batch_size = 150)$data,
                      stringsAsFactors = FALSE)
 
 # Test the UdallR cleaning function

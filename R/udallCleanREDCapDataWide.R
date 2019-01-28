@@ -28,17 +28,27 @@ udallCleanREDCapDataWide <- function(dat, visit = 1, drop.excluded = TRUE,
 
   if (!is.numeric(visit) | ! visit %in% 1:2)
     stop(paste(visit, "is not a valid visit ID. Choose 1 or 2."))
+  
+  # When we first started working with this, we cast the entire result of 
+  # redcap_read to a data frame, when it's actually a list. That led to the 
+  # data columns being prepended with "data." and the others being tacked on the
+  # end. This statement works with either one
+  
+  # If there are data columns
+  if (length(grep("^data.", colnames(dat))) > 0) {
 
-  # The REDCap download function appends eight columns regarding the status of
-  # the download that we don't need. Keep them if the user wants, though
-  status.columns <- !grepl("^data", colnames(dat))
-  if (!keep.status.columns)
-    dat <- dat[, !status.columns]
-
-  # remove the leading "data" from the names
-  names <- colnames(dat)
-  newnames <- gsub("^data.", "", names)
-  colnames(dat) <- newnames
+    # The REDCap download function appends eight columns regarding the status of
+    # the download that we don't need. Keep them if the user wants, though
+    status.columns <- !grepl("^data", colnames(dat))
+    if (!keep.status.columns)
+      dat <- dat[, !status.columns]
+  
+    # remove the leading "data" from the names
+    names <- colnames(dat)
+    newnames <- gsub("^data.", "", names)
+    colnames(dat) <- newnames
+  
+  }
 
   # Select the on/off/behavioral columns depending on which visit.
   arm <- paste0("arm_", visit)
