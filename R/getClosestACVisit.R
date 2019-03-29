@@ -45,7 +45,8 @@ getClosestACVisit <- function(dat, multivis.df = NULL, multivis.file = NULL,
   }
 
   # Clean multivis
-  multivis.dat <- udallReplaceMissing(multivis.temp)
+  multivis.dat <- subset(udallReplaceMissing(multivis.temp),
+                         site != "Seattle UW")
 
   # Get the nearest row from the multivis based on the REDCap data (dat)
   closest.visit <- as.data.frame(t(apply(X = dat, MARGIN = 1,
