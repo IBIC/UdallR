@@ -24,12 +24,8 @@ rc.token <- readChar("~/UdallR/access-token.txt", nchars = 32)
 # Read the data from the REDCap API. "stringsAsFactors" stops R from treating
 ## important strings as factors (which when written to file, are written as the
 ## underlying numeric representation.
-## NEW Jan. 2019
-## The default batch_size is 100, and we're just barely above 100 now, so bump
-## it up so we only have to do one run.
-## Also, subset $data from dat before as.data.frame (old method still available)
 dat <- as.data.frame(redcap_read(redcap_uri = "https://redcap.iths.org/api/",
-                                 token = rc.token, batch_size = 150)$data,
+                                    token = rc.token),
                      stringsAsFactors = FALSE)
 
 # Test the UdallR cleaning function
@@ -48,7 +44,7 @@ checked <- udallCheckDataWide(cdat, error.file = "REDCap-errors.txt")
 udallCrosscheckEntries(cdat, error.file = "mismatch-errors.txt")
 
 closest.visits <- getClosestACVisit(cdat,
-                                    multivis.df = panuc_multivis_2018_08_15)
+                                    multivis.df = panuc_multivis_2018_10_26)
 
 demographics <- c("agevisit", "education_years", "gender", "handedness")
 pd.symptoms <- c("hoehn_and_yahr_m0", "dx_dominant_side", "updrs_new_1_total",
