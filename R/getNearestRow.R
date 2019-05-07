@@ -53,7 +53,7 @@ getNearestRow <- function(x, multivis)
     if (all(dates.diff > 0.5, na.rm = TRUE))
     {
       warning(paste0(ID.with.prefix,
-                    " doesn't have any visits within ±6 months. ",
+                    " doesn't have any visits within +/-6 months. ",
                     "Choosing nearest visit (",
                     round((ages - age)[closest] * 12, 3),
                     " months). "))

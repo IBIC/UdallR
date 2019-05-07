@@ -1,17 +1,13 @@
 # Load libraries required to download from REDCap and install custom packages.
 # This loop installs missing pacakges.
 
-for (package in c("REDCapR", "devtools"))
-{
-  if (!require(package, character.only = TRUE))
-  {
-    install.packages(package)
-    library(package, character.only = TRUE)
-  }
-}
+library(REDCapR)
 
 # Install the custom UdallR library. You may have to change the path, depending
-## on where you downloaded UdallR to.
+# on where you downloaded UdallR to. Installation has to be done each time to
+# pick up the new data file.
+
+library(devtools)
 install("~/UdallR", quiet = FALSE)
 library(UdallR, quietly = TRUE,  warn.conflicts = FALSE)
 
@@ -28,7 +24,7 @@ rc.token <- readChar("~/UdallR/access-token.txt", nchars = 32)
 ## important strings as factors (which when written to file, are written as the
 ## underlying numeric representation.
 dat <- as.data.frame(redcap_read(redcap_uri = "https://redcap.iths.org/api/",
-                                 token = rc.token),
+                                 token = rc.token, batch_size = 150),
                      stringsAsFactors = FALSE)
 
 # Test the UdallR cleaning function
@@ -41,7 +37,7 @@ HC.cdat <- cdat[cdat$group == "control", ]
 # Get the closest visits, comparing to the most recent multivis
 ## UPDATE THIS LINE WHEN NECESSARY
 closest.visits  <- getClosestACVisit(cdat,
-                                     multivis.df = panuc_multivis_2018_10_26)
+                                     multivis.df = panuc_multivis_2019_05_06)
 
 # Get the numeric id from the PWAXX-XXXX string
 idnum <- gsub("[^0-9]", "", closest.visits$summary_id)
@@ -71,4 +67,4 @@ out <- out[!is.na(out$idnum), ]
 # Save to file
 write.csv(out, outfile, row.names = FALSE)
 
-message(outfile, "saved")
+message(outfile, " saved")

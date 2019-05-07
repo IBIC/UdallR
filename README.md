@@ -82,3 +82,25 @@ A few important notes regarding `UdallR` and its presence on GitHub.
 + In order for a subject to be identified as ready to process with `UdallR`, they need to have the `on_mri_dob` date-of-birth variable entered. **This is the variable in the *scan log* form, not the demographic form.**
 + Make sure not to commit your REDCap API key to GitHub, your key is for you and you only. See `example.R` for an example of how to save your key locally and avoid uploading it to GitHub.
 + Do not distribute this repo. The `data/` directory has data files (`.rda` extensions) that contain sensitive and protected information.
+
+## How to upload new 'closest visits'
+
+For some analyses, we use values gathered from the clinical core rather than at IBIC. We use the current closest visit, before or after. This means they can be supplanted when a participant comes to the clinical core say two months after their MRI visit, when previously they had visited four months prior.
+Additionally, people may come to their MRI visit without a clinical core visit, so we have to keep the "Arm 3: AnalyticalCore" instrument "MS Access Database" up-to-date.
+When Brian supplies a new dataset from the clincal core, we upload it
+to REDCap to keep values up-to-date.
+
+ 1. Download data, and if necessary, combine them into a single CSV, using `merge-multivis.R`.
+ 2. Copy/move to `panuc_multivis_20YY_MM_DD.csv` in `UdallR/data/`
+ 3. Use `csv2rda` to convert the CSV to an `.rda` (R Data) file in the same directory. Pass the date as an argument: `YY_MM_DD`.
+ 4. Now run `update-mulitivis` with the same argument (`YY_MM_DD`). This changes the reference in the appropriate scripts to the latest *RDA* file.
+ 5. Now that scripts have been updated, run `Rscript getClosestVisits.R`. If it exits without error, there weill be a new CSV file in `closest-visits/`, named with *today*'s date (rather than the date of the data file). 
+    * If there are errors, they will have to be fixed, usually a consequence of mismatched column names (see below.)
+ 6.  Finally, upload to REDCap. Open the UDALL_P2 project and navigate to the Data Import Tool (Applications column on the left), and upload the CSV.
+    * This may be unavailable to you based on your user permissions. If you need to upload this, ask a project administrator to upgrade you. 
+    * If there are "variable don't exist in the project" errors, then that means the clinical core has added fields to their export, which either need to be removed from the upload (modify `getClosestVisits.R`) or added to REDCap (out-of-scope for this README). 
+ 7. Once the data have been successfully uploaded to REDCap, remove the old RDA file from the GitHub repo (`git rm --cached data/panuc_mulitivis_[A].rda`) and add the new one (`git add data/panuc_mulitivis_[B].rda`). Commit the change (`git commit -m "new multivis"`) and push the changes (`git push origin master`).
+
+**Important:** REDCap silently ignores fields that are missing in the input data compared to "MS Access Database." This means if a field is removed, it's impossible to tell. I recommend periodically comparing the headers of the resulting CSV file to the headers of the "MS Access Database" (download the current version) to see if anything needs to be renamed/removed.
+
+

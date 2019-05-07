@@ -97,7 +97,7 @@ udallCleanREDCapDataWide <- function(dat, visit = 1, drop.excluded = TRUE,
   # data("Codebook_PaNUC_2017_07_07")
   # closest.colnames <- as.character(Codebook_PaNUC_2017_07_07$Stata_Variable_Name)
 
-  closest.colnames <- tolower(colnames(panuc_multivis_2018_10_26))
+  closest.colnames <- tolower(colnames(panuc_multivis_2019_05_06))
   closest.colnames <- closest.colnames[closest.colnames != ""]
   closest.colnames <- c("idnum",
                         closest.colnames[closest.colnames %in% colnames(dat)])

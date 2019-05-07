@@ -1,9 +1,12 @@
 setwd("~/UdallR/data")
 
 args <- commandArgs(trailingOnly = TRUE)
-dir <- args[1]
 
-if (length(args) == 0) dir <- "180826"
+if (length(args) == 1){
+  dir <- args[1]
+} else {
+  stop("Supply (1) input directory")
+}
 
 if (!dir.exists(dir))
   stop("No such directory")
@@ -35,3 +38,6 @@ output.date <- gsub(".*/panuc-0110-", "", gsub(".csv", "", files[2]))
 output.file <- paste0("~/UdallR/data/panuc_multivis_", output.date, ".csv")
 
 write.csv(merged, file = output.file, row.names = FALSE)
+
+message("Saved to: ", output.file)
+message("Now run: ./csv2rda ", substring(output.date, 3))
