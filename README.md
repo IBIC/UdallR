@@ -90,11 +90,11 @@ Additionally, people may come to their MRI visit without a clinical core visit, 
 When Brian supplies a new dataset from the clincal core, we upload it
 to REDCap to keep values up-to-date.
 
- 1. Download data, and if necessary, combine them into a single CSV, using `merge-multivis.R`.
+ 1. Download data, and if necessary, combine them into a single CSV, using `1_merge-multivis.R`.
  2. Copy/move to `panuc_multivis_20YY_MM_DD.csv` in `UdallR/data/`
- 3. Use `csv2rda` to convert the CSV to an `.rda` (R Data) file in the same directory. Pass the date as an argument: `YY_MM_DD`.
- 4. Now run `update-mulitivis` with the same argument (`YY_MM_DD`). This changes the reference in the appropriate scripts to the latest *RDA* file.
- 5. Now that scripts have been updated, run `Rscript getClosestVisits.R`. If it exits without error, there weill be a new CSV file in `closest-visits/`, named with *today*'s date (rather than the date of the data file). 
+ 3. Use `2_csv2rda` to convert the CSV to an `.rda` (R Data) file in the same directory. Pass the date as an argument: `YY_MM_DD`.
+ 4. Now run `3_update-mulitivis` with the same argument (`YY_MM_DD`). This changes the reference in the appropriate scripts to the latest *RDA* file.
+ 5. Now that scripts have been updated, run `Rscript 4_getClosestVisits.R`. If it exits without error, there weill be a new CSV file in `closest-visits/`, named with *today*'s date (rather than the date of the data file). 
     * If there are errors, they will have to be fixed, usually a consequence of mismatched column names (see below.)
  6.  Finally, upload to REDCap. Open the UDALL_P2 project and navigate to the Data Import Tool (Applications column on the left), and upload the CSV.
     * This may be unavailable to you based on your user permissions. If you need to upload this, ask a project administrator to upgrade you. 

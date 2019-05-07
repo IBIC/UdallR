@@ -40,4 +40,4 @@ output.file <- paste0("~/UdallR/data/panuc_multivis_", output.date, ".csv")
 write.csv(merged, file = output.file, row.names = FALSE)
 
 message("Saved to: ", output.file)
-message("Now run: ./csv2rda ", substring(output.date, 3))
+message("Now run: ./2_csv2rda.sh ", substring(output.date, 3))

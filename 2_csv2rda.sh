@@ -52,7 +52,7 @@ EOF
 
     # The next step is to update the relevant files.
     echo "Now run:"
-    echo "${projecthome}/update-multivis ${newdate}"
+    echo "${projecthome}/3_update-multivis.sh ${newdate}"
 
     fi
 fi
